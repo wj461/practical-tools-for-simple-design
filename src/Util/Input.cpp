@@ -11,6 +11,7 @@ const Uint8 *Input::s_KeyState = SDL_GetKeyboardState(nullptr);
 glm::vec2 Input::s_CursorPosition = glm::vec2(0.0F);
 glm::vec2 Input::s_ScrollDistance = glm::vec2(-1.0F, -1.0F);
 bool Input::s_LBPressed = false;
+bool Input::s_LBFailingEdge = false;
 bool Input::s_RBPressed = false;
 bool Input::s_MBPressed = false;
 bool Input::s_Scroll = false;
@@ -20,6 +21,10 @@ bool Input::s_Exit = false;
 bool Input::IsKeyPressed(const Keycode &key) {
     const auto temp = static_cast<const int>(key);
     return s_KeyState[temp] != 0;
+}
+
+bool Input::IsLButtonEdge() {
+    return s_LBFailingEdge;
 }
 
 bool Input::IsLButtonDown() {
@@ -58,6 +63,7 @@ void Input::Update() {
         -(s_CursorPosition.y - static_cast<float>(WINDOW_HEIGHT) / 2);
 
     s_Scroll = s_MouseMoving = false;
+    s_LBFailingEdge = false;
 
     while (SDL_PollEvent(&s_Event) != 0) {
         if (s_Event.type == SDL_MOUSEBUTTONUP &&
@@ -66,6 +72,7 @@ void Input::Update() {
         }
         if (s_Event.type == SDL_MOUSEBUTTONDOWN &&
             s_Event.button.button == SDL_BUTTON_LEFT) {
+            s_LBFailingEdge = true;
             s_LBPressed = true;
         }
 

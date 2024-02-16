@@ -75,6 +75,8 @@ public:
      */
     static bool IsLButtonDown();
 
+    static bool IsLButtonEdge();
+
     /**
      * @brief Checks if the right mouse button is currently down.
      * @return  true if the right mouse button is currently down, false
@@ -134,6 +136,7 @@ private:
     static glm::vec2 s_ScrollDistance;
 
     static bool s_LBPressed;
+    static bool s_LBFailingEdge;
     static bool s_RBPressed;
     static bool s_MBPressed;
     static bool s_Scroll;

@@ -15,15 +15,24 @@ void App::Start() {
     m_Giraffe->SetZIndex(5);
     m_Giraffe->Start();
 
+    m_Map->SetDrawable(
+        std::make_shared<Util::Image>("../assets/sprites/block.png"));
+    m_Map->SetZIndex(5);
+
     m_Root.AddChild(m_Giraffe);
+    m_Root.AddChild(m_Map);
 
     m_CurrentState = State::UPDATE;
 }
 
 void App::Update() {
     if (Util::Input::IsLButtonDown()) {
-        LOG_DEBUG("Left button down");
+        // LOG_DEBUG("Left button down");
     }
+    if (Util::Input::IsLButtonEdge()) {
+        LOG_DEBUG("Left button edge");
+    }
+
     if (Util::Input::IsRButtonDown()) {
         LOG_DEBUG("Right button down");
     }
@@ -52,6 +61,7 @@ void App::Update() {
     }
 
     m_Giraffe->Update();
+    m_Map->Update();
 
     m_Root.Update();
 
