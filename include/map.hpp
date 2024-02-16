@@ -2,6 +2,7 @@
 #define MAP_HPP
 
 #include "Util/GameObject.hpp"
+#include <vector>
 
 class Map : public Util::GameObject {
 
@@ -10,10 +11,12 @@ public:
 
     void Start();
 
-private:
-    std::shared_ptr<glm::vec2> map;
+    void NewBlock(glm::vec2 mousePosition);
 
-    // const glm::int64 map_size = 16;
+private:
+    std::vector<std::vector<int>> map;
+
+    glm::int64 block_size = 16;
 
 };
 #endif
