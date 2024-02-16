@@ -11,7 +11,7 @@ void App::Start() {
     LOG_TRACE("Start");
 
     m_Giraffe->SetDrawable(
-        std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
+        std::make_shared<Util::Image>("../assets/sprites/block.png"));
     m_Giraffe->SetZIndex(5);
     m_Giraffe->Start();
 
@@ -54,6 +54,7 @@ void App::Update() {
     m_Giraffe->Update();
 
     m_Root.Update();
+
 }
 
 void App::End() { // NOLINT(this method will mutate members in the future)

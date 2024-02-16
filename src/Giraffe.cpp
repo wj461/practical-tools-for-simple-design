@@ -38,6 +38,7 @@ void Giraffe::Update() {
 
     pos += deltaTransform.translation;
     rotation += deltaTransform.rotation;
+    LOG_DEBUG("scale {}, {}", scale.x, scale.y);
 
     m_GiraffeText->Update();
 }

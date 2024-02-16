@@ -1,6 +1,7 @@
 #ifndef GIRAFFE_HPP
 #define GIRAFFE_HPP
 
+#include <glm/fwd.hpp>
 #include <utility>
 
 #include "GiraffeText.hpp"
