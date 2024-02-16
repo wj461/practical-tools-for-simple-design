@@ -13,7 +13,7 @@ public:
 private:
     std::shared_ptr<glm::vec2> map;
 
-    const glm::int64 map_size = 16;
+    // const glm::int64 map_size = 16;
 
 };
 #endif
