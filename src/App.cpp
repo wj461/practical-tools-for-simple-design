@@ -1,24 +1,33 @@
 #include "App.hpp"
 
+#include "TalkText.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
 #include "GiraffeText.hpp"
+#include "config.hpp"
 
 void App::Start() {
     LOG_TRACE("Start");
+    m_TalkText =
+        std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 100);
+    m_TalkText->SetZIndex(UI_Z);
+    m_TalkText->Start();
 
     m_Giraffe->SetDrawable(
         std::make_shared<Util::Image>("../assets/sprites/block.png"));
-    m_Giraffe->SetZIndex(5);
+    m_Giraffe->SetZIndex(10);
     m_Giraffe->Start();
+    // m_Giraffe->AddChild(m_TalkText);
 
     m_Map->SetDrawable(
         std::make_shared<Util::Image>("../assets/sprites/block.png"));
-    m_Map->SetZIndex(5);
+    m_Map->SetZIndex(MAP_Z);
+    m_Map->Start();
 
+    m_Root.AddChild(m_TalkText);
     m_Root.AddChild(m_Giraffe);
     m_Root.AddChild(m_Map);
 
@@ -62,6 +71,7 @@ void App::Update() {
 
     m_Giraffe->Update();
     m_Map->Update();
+    m_TalkText->Update();
 
     m_Root.Update();
 

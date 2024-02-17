@@ -1,6 +1,7 @@
 #ifndef APP_HPP
 #define APP_HPP
 
+#include "TalkText.hpp"
 #include "map.hpp"
 #include "pch.hpp" // IWYU pragma: export
 
@@ -27,6 +28,7 @@ private:
 
     std::shared_ptr<Giraffe> m_Giraffe = std::make_shared<Giraffe>();
     std::shared_ptr<Map> m_Map = std::make_shared<Map>();
+    std::shared_ptr<TalkText> m_TalkText = std::make_shared<TalkText>();
     //    std::shared_ptr<GiraffeText> m_GiraffeText =
     //    std::make_shared<GiraffeText>();
     Util::Root m_Root;

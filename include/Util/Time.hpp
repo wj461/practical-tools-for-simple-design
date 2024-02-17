@@ -27,6 +27,8 @@ public:
      */
     static double GetDeltaTime() { return s_DeltaTime; }
 
+    static bool Delay(int mSec);
+
     /**
      * @brief Update the time.
      *
@@ -58,6 +60,8 @@ private:
      * the last frame.
      */
     static double s_DeltaTime;
+
+    static int counter;
 };
 } // namespace Util
 

@@ -24,7 +24,8 @@ namespace Util {
 class Text : public Core::Drawable {
 public:
     Text(const std::string &font, int size, const std::string &text,
-         const Util::Color &color = Color(0.5F, 0.5F, 0.5F, 1.0F));
+         const Util::Color &color = Color(0.5F, 0.5F, 0.5F, 1.0F),
+         int wrapLength = 0);
 
     glm::vec2 GetSize() const override { return m_Size; };
 
@@ -81,6 +82,7 @@ private:
     std::string m_Text;
     Util::Color m_Color;
     glm::vec2 m_Size;
+    int m_wrapLength;
 };
 } // namespace Util
 

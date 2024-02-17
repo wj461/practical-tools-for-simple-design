@@ -50,6 +50,7 @@ set(SRC_FILES
     ${SRC_DIR}/GiraffeText.cpp
     ${SRC_DIR}/map.cpp
     ${SRC_DIR}/Block.cpp
+    ${SRC_DIR}/TalkText.cpp
 )
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(INCLUDE_FILES
@@ -86,6 +87,7 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/GiraffeText.hpp
     ${INCLUDE_DIR}/map.hpp
     ${INCLUDE_DIR}/Block.hpp
+    ${INCLUDE_DIR}/TalkText.hpp
     ${INCLUDE_DIR}/config.hpp
 )
 set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)

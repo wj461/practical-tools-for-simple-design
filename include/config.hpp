@@ -13,6 +13,10 @@ constexpr int WINDOW_POS_Y = SDL_WINDOWPOS_UNDEFINED;
 constexpr unsigned int WINDOW_WIDTH = 1280;
 constexpr unsigned int WINDOW_HEIGHT = 720;
 
+constexpr unsigned int UI_Z = 6;
+constexpr unsigned int MAP_Z = 5;
+constexpr unsigned int BG_Z = 4;
+
 constexpr Util::Logger::Level DEFAULT_LOG_LEVEL = Util::Logger::Level::DEBUG;
 
 #endif
