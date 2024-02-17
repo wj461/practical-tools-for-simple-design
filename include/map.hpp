@@ -20,18 +20,20 @@ private:
 
     void LoadEmptyMap();
 
-    void NewBlock(glm::vec2 indexPos, int indexMap);
+    std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap);
 
     bool IsDrawRange(glm::vec2 indexPos);
 
     glm::int64 ChooseMaterial(glm::vec2 indexPos);
 
+    void ChangeBlock(glm::vec2 indexPos, int indexMap);
+
     std::shared_ptr<Util::GameObject> material_focus = 
     std::make_shared<Util::GameObject>();
 
-    glm::int64 index_map = 1;
+    glm::int64 index_map = 0;
 
-    std::vector<std::vector<glm::int64>> map, material_map;
+    std::vector<std::vector<std::shared_ptr<Block>>> map;
 
     std::vector<std::string> material_path = 
     {

@@ -36,27 +36,20 @@ void Map::Update() {
 
     // edit map
     if (Util::Input::IsLButtonEdge() && IsDrawRange(index_pos)){
-        NewBlock(index_pos, index_map);
-        // map[index_pos.y][index_pos.x] = index_map;
+        ChangeBlock(index_pos, index_map);
     }
+    // chang target material
     else if (Util::Input::IsLButtonEdge()){
         index_map = ChooseMaterial(index_pos);
-        LOG_DEBUG("mousePos {}, {}", mouse_position.x, mouse_position.y);
-        LOG_DEBUG("indexPos {}, {}", index_pos.x, index_pos.y);
-        LOG_DEBUG("indexMap {}", index_map);
-
-        ChooseMaterial(index_pos);
     }
 }
 
 void Map::LoadEmptyMap(){
     for (glm::int64 y = 0; y < MAP_SIZE.y; y++){
-        std::vector<glm::int64> tempVector;
+        std::vector<std::shared_ptr<Block>> tempVector;
         for (glm::int64 x = 0; x < MAP_SIZE.x; x++){
-            tempVector.push_back(0);
-
             glm::vec2 index_pos = {MAP_START_INDEX.x+x ,MAP_START_INDEX.y-y };
-            NewBlock(index_pos, 0);
+            tempVector.push_back(NewBlock(index_pos, 0));
         }
         map.push_back(tempVector);
     }
@@ -74,19 +67,25 @@ void Map::LoadMaterial(){
     }
 }
 
-void Map::NewBlock(glm::vec2 indexPos, int indexMap){
+std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, int indexMap){
     std::string path = "../assets/sprites/" + material_path[indexMap];
     glm::vec2 translation {
     (indexPos.x * BLOCK_SIZE),
     (indexPos.y * BLOCK_SIZE)};
 
+    auto block = std::make_shared<Block>();
 
-    auto block = std::make_shared<Block>(translation);
+    block->SetPosition(translation);
+    block->SetIndexPostion(indexPos);
+
     block->SetDrawable(
         std::make_shared<Util::Image>(path));
     block->SetPivot({(BLOCK_SIZE/2) * (-1),(BLOCK_SIZE/2) * (-1)});
     block->SetZIndex(MAP_Z);
+
     this->AddChild(block);
+
+    return block;
 }
 
 bool Map::IsDrawRange(glm::vec2 indexPos){
@@ -118,4 +117,14 @@ glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
     indexPos.y * BLOCK_SIZE});
 
     return material_index;
+}
+
+void Map::ChangeBlock(glm::vec2 indexPos, int indexMap){
+    for (std::vector<std::shared_ptr<Block>> blocks : map ){
+        for (std::shared_ptr<Block> block : blocks ){
+            if (block->GetIndexPostion() == indexPos){
+                block->SetIndexMaterial(indexMap, material_path[indexMap]);
+            }
+        }
+    }
 }
