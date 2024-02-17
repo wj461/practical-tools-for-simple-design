@@ -26,7 +26,7 @@ private:
 
     glm::int64 ChooseMaterial(glm::vec2 indexPos);
 
-    void ChangeBlock(glm::vec2 indexPos, int indexMap);
+    void ChangeBlockMaterial(glm::vec2 indexPos, int indexMap);
 
     std::shared_ptr<Util::GameObject> material_focus = 
     std::make_shared<Util::GameObject>();
@@ -42,10 +42,12 @@ private:
     "block48.png","block48R.png"
     };
 
+    // can set
     glm::int64 BLOCK_SIZE = 48;
     glm::int64 MATERIAL_COL_NUM = 4;
     glm::vec2 MAP_SIZE = {20, 10};
 
+    // can set
     glm::vec2 LEFT_TOP_POS = {
         glm::int64(WINDOW_WIDTH/2) * (-1),
         glm::int64(WINDOW_HEIGHT/2) };
@@ -55,6 +57,7 @@ private:
         glm::int64(LEFT_TOP_POS.y/BLOCK_SIZE) -1
     };
 
+    // can set
     glm::vec2 MAP_START_POS ={
         (LEFT_TOP_POS.x)+240,
         (WINDOW_HEIGHT/2) };

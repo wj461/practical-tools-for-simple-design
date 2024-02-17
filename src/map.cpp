@@ -1,9 +1,7 @@
 #include "map.hpp"
 #include "Block.hpp"
-#include "Util/GameObject.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
-#include "Util/Logger.hpp"
 #include "config.hpp"
 #include <cmath>
 #include <glm/detail/qualifier.hpp>
@@ -35,8 +33,11 @@ void Map::Update() {
     glm::vec2 index_pos {floor(mouse_position.x/BLOCK_SIZE), floor(mouse_position.y/BLOCK_SIZE)};
 
     // edit map
-    if (Util::Input::IsLButtonEdge() && IsDrawRange(index_pos)){
-        ChangeBlock(index_pos, index_map);
+    // if (Util::Input::IsLButtonEdge() && IsDrawRange(index_pos)){
+    //     ChangeBlockMaterial(index_pos, index_map);
+    // }
+    if (Util::Input::IsLButtonDown() && IsDrawRange(index_pos)){
+        ChangeBlockMaterial(index_pos, index_map);
     }
     // chang target material
     else if (Util::Input::IsLButtonEdge()){
@@ -119,7 +120,7 @@ glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
     return material_index;
 }
 
-void Map::ChangeBlock(glm::vec2 indexPos, int indexMap){
+void Map::ChangeBlockMaterial(glm::vec2 indexPos, int indexMap){
     for (std::vector<std::shared_ptr<Block>> blocks : map ){
         for (std::shared_ptr<Block> block : blocks ){
             if (block->GetIndexPostion() == indexPos){

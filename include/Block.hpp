@@ -18,9 +18,12 @@ public:
 
     void SetIndexMaterial(glm::int64 index, std::string fileName);
 
+    void SetStand(bool canStand) { stand = canStand; }
+
 private:
     glm::vec2 index_pos = {0,0};
     glm::int64 index_material = 0;
+    bool stand = true;
 };
 
 
