@@ -14,19 +14,9 @@
 #include <vector>
 
 void Map::Start() {
-    LOG_DEBUG("MAP START INDEX {} {}", MAP_START_INDEX.x, MAP_START_INDEX.y);
-    LOG_DEBUG("MAP END INDEX {} {}", MAP_END_INDEX.x, MAP_END_INDEX.y);
+    LOG_DEBUG("M Start i {}, {}", MATERIAL_START_INDEX.x, MATERIAL_START_INDEX.y);
 
-    for (glm::int64 y = 0; y < MAP_SIZE.y; y++){
-        std::vector<glm::int64> tempVector;
-        for (glm::int64 x = 0; x < MAP_SIZE.x; x++){
-            tempVector.push_back(0);
-
-            glm::vec2 index_pos = {MAP_START_INDEX.x+x ,MAP_START_INDEX.y-y };
-            NewBlock(index_pos, 0);
-        }
-        map.push_back(tempVector);
-    }
+    LoadEmptyMap();
     LoadMaterial();
 }
 
@@ -46,6 +36,21 @@ void Map::Update() {
         LOG_DEBUG("mousePos {}, {}", mouse_position.x, mouse_position.y);
         LOG_DEBUG("indexPos {}, {}", index_pos.x, index_pos.y);
         LOG_DEBUG("indexMap {}", index_map);
+
+        ChooseMaterial(index_pos);
+    }
+}
+
+void Map::LoadEmptyMap(){
+    for (glm::int64 y = 0; y < MAP_SIZE.y; y++){
+        std::vector<glm::int64> tempVector;
+        for (glm::int64 x = 0; x < MAP_SIZE.x; x++){
+            tempVector.push_back(0);
+
+            glm::vec2 index_pos = {MAP_START_INDEX.x+x ,MAP_START_INDEX.y-y };
+            NewBlock(index_pos, 0);
+        }
+        map.push_back(tempVector);
     }
 }
 
@@ -84,4 +89,14 @@ bool Map::IsDrawRange(glm::vec2 indexPos){
     }
 
     return false;
+}
+
+glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
+    glm::int64 material_index = 
+    (glm::int64(indexPos.x) - MATERIAL_START_INDEX.x) +
+    (glm::int64(indexPos.y) - MATERIAL_START_INDEX.y);
+
+    LOG_DEBUG("material index {}",material_index);
+
+    return material_index;
 }
