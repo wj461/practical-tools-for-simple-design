@@ -11,10 +11,20 @@
 #include <memory>
 #include <spdlog/spdlog.h>
 #include <string>
+#include <unistd.h>
 #include <vector>
 
 void Map::Start() {
-    LOG_DEBUG("M Start i {}, {}", MATERIAL_START_INDEX.x, MATERIAL_START_INDEX.y);
+
+    material_focus->SetDrawable(
+        std::make_shared<Util::Image>("../assets/sprites/focus.png")
+    );
+    material_focus->SetPivot({(BLOCK_SIZE/2) * (-1), (BLOCK_SIZE/2) * (-1)});
+    material_focus->SetPosition({
+        MATERIAL_START_INDEX.x * BLOCK_SIZE,
+        MATERIAL_START_INDEX.y * BLOCK_SIZE});
+    material_focus->SetZIndex(UI_Z);
+    this->AddChild(material_focus);
 
     LoadEmptyMap();
     LoadMaterial();
@@ -23,16 +33,14 @@ void Map::Start() {
 void Map::Update() {
     auto mouse_position = Util::Input::GetCursorPosition();
     glm::vec2 index_pos {floor(mouse_position.x/BLOCK_SIZE), floor(mouse_position.y/BLOCK_SIZE)};
-    int index_map = 1;
-
 
     // edit map
     if (Util::Input::IsLButtonEdge() && IsDrawRange(index_pos)){
         NewBlock(index_pos, index_map);
         // map[index_pos.y][index_pos.x] = index_map;
     }
-
-    if (Util::Input::IsLButtonEdge()){
+    else if (Util::Input::IsLButtonEdge()){
+        index_map = ChooseMaterial(index_pos);
         LOG_DEBUG("mousePos {}, {}", mouse_position.x, mouse_position.y);
         LOG_DEBUG("indexPos {}, {}", index_pos.x, index_pos.y);
         LOG_DEBUG("indexMap {}", index_map);
@@ -69,13 +77,14 @@ void Map::LoadMaterial(){
 void Map::NewBlock(glm::vec2 indexPos, int indexMap){
     std::string path = "../assets/sprites/" + material_path[indexMap];
     glm::vec2 translation {
-    ((floor(indexPos.x) * BLOCK_SIZE)+(float(BLOCK_SIZE)/2)),
-    ((floor(indexPos.y) * BLOCK_SIZE)+(float(BLOCK_SIZE)/2))};
+    (indexPos.x * BLOCK_SIZE),
+    (indexPos.y * BLOCK_SIZE)};
 
 
     auto block = std::make_shared<Block>(translation);
     block->SetDrawable(
         std::make_shared<Util::Image>(path));
+    block->SetPivot({(BLOCK_SIZE/2) * (-1),(BLOCK_SIZE/2) * (-1)});
     block->SetZIndex(MAP_Z);
     this->AddChild(block);
 }
@@ -92,11 +101,21 @@ bool Map::IsDrawRange(glm::vec2 indexPos){
 }
 
 glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
+    if (glm::int64(indexPos.x - MATERIAL_START_INDEX.x) >= MATERIAL_COL_NUM){
+        return index_map;
+    }
+
     glm::int64 material_index = 
     (glm::int64(indexPos.x) - MATERIAL_START_INDEX.x) +
-    (glm::int64(indexPos.y) - MATERIAL_START_INDEX.y);
+    (MATERIAL_COL_NUM * (MATERIAL_START_INDEX.y - (glm::int64(indexPos.y))));
 
-    LOG_DEBUG("material index {}",material_index);
+    if (material_index >= glm::int64(material_path.size())){
+        return index_map;
+    }
+
+    material_focus->SetPosition({
+    indexPos.x * BLOCK_SIZE,
+    indexPos.y * BLOCK_SIZE});
 
     return material_index;
 }

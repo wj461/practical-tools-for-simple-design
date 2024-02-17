@@ -121,6 +121,8 @@ public:
      */
     void SetVisible(const bool visible) { m_Visible = visible; }
 
+    void SetPosition(const glm::vec2 position) { m_Transform.translation = position; }
+
     /**
      * @brief Add a child to the game object.
      *
