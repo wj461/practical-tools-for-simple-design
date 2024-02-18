@@ -34,9 +34,11 @@ private:
     
     void LoadToolImage();
 
+    void LoadChooseToolFocus();
+
     std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, glm::int64 indexZ = MAP_Z, std::shared_ptr<Util::Image> img = nullptr);
     //tool
-
+    Tool ChooseTool(glm::vec2 indexPos);
 
     //edit map material
     glm::int64 ChooseMaterial(glm::vec2 indexPos);
@@ -49,18 +51,17 @@ private:
     //
     bool IsEditRange(glm::vec2 indexPos);
 
-    std::shared_ptr<Block> FindBlockByIndex(glm::vec2 indexPos);
+    std::shared_ptr<Block> FindMapBlockByIndex(glm::vec2 indexPos);
 
-    std::shared_ptr<Block> material_focus, event_focus;
+    // focus
+    std::shared_ptr<Block> material_focus, event_focus, tool_focus;
 
     std::vector<std::shared_ptr<Block>> tools;
 
-
-    Tool tool = Tool::Event;
     // focus
-    glm::int64 current_material_index_focus = 0;
-
-    Block current_event_focus;
+    Tool current_tool = Tool::Edit;
+    glm::int64 current_material_index = 0;
+    std::shared_ptr<Block> current_event;
 
     std::vector<std::vector<std::shared_ptr<Block>>> map;
 
@@ -70,9 +71,7 @@ private:
     // can set
     std::vector<std::string> material_path = 
     {
-    "empty48.png","block48.png","block48R.png",
-    "block48.png","block48R.png",
-    "block48.png","block48R.png"
+    "empty48.png","block48.png","block48R.png"
     };
 
     // can set

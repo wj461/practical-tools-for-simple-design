@@ -17,6 +17,7 @@
 void Map::Start() {
     LoadMaterial();
     LoadChooseEventFocus();
+    LoadChooseToolFocus();
     LoadChooseMaterialFocus();
     LoadEmptyMap();
     LoadToolImage();
@@ -26,26 +27,28 @@ void Map::Update() {
     auto mouse_position = Util::Input::GetCursorPosition();
     glm::vec2 index_pos {floor(mouse_position.x/BLOCK_SIZE), floor(mouse_position.y/BLOCK_SIZE)};
 
-    switch (tool) {
+    //Tool select
+    if (Util::Input::IsLButtonEdge()) {
+        current_tool = ChooseTool(index_pos);
+        LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
+    }
+
+    switch (current_tool) {
     case Edit:
         // edit map
         if (Util::Input::IsLButtonDown() && IsEditRange(index_pos)){
-            ChangeBlockMaterial(index_pos, current_material_index_focus);
+            ChangeBlockMaterial(index_pos, current_material_index);
         }
         // chang target material
         else if (Util::Input::IsLButtonEdge()){
-            current_material_index_focus = ChooseMaterial(index_pos);
+            current_material_index = ChooseMaterial(index_pos);
         }
         break;
     case Event:
         if (Util::Input::IsLButtonEdge() && IsEditRange(index_pos)){
-            ChooseEventBlock(index_pos);
+            current_event = ChooseEventBlock(index_pos);
         }
         break;
-    }
-
-    if (Util::Input::IsLButtonEdge()){
-        LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
     }
 
 }
@@ -83,6 +86,12 @@ void Map::LoadChooseMaterialFocus(){
 void Map::LoadChooseEventFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
     event_focus = NewBlock(MAP_START_INDEX, 0, BlockType::Focus, UI_Z, img);
+    event_focus->SetVisible(false);
+}
+
+void Map::LoadChooseToolFocus(){
+    auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
+    tool_focus = NewBlock(TOOL_START_INDEX, 0, BlockType::Focus, UI_Z, img);
 }
 
 void Map::LoadToolImage(){
@@ -134,7 +143,7 @@ bool Map::IsEditRange(glm::vec2 indexPos){
     return false;
 }
 
-std::shared_ptr<Block> Map::FindBlockByIndex(glm::vec2 indexPos){
+std::shared_ptr<Block> Map::FindMapBlockByIndex(glm::vec2 indexPos){
     for (std::vector<std::shared_ptr<Block>> blocks : map ){
         for (std::shared_ptr<Block> block : blocks ){
             if (block->GetIndexPostion() == indexPos){
@@ -147,7 +156,7 @@ std::shared_ptr<Block> Map::FindBlockByIndex(glm::vec2 indexPos){
 
 glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
     if (glm::int64(indexPos.x - MATERIAL_START_INDEX.x) >= MATERIAL_COL_NUM){
-        return current_material_index_focus;
+        return current_material_index;
     }
 
     glm::int64 material_index = 
@@ -155,7 +164,7 @@ glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
     (MATERIAL_COL_NUM * (MATERIAL_START_INDEX.y - (glm::int64(indexPos.y))));
 
     if (material_index >= glm::int64(material_path.size())){
-        return current_material_index_focus;
+        return current_material_index;
     }
 
     material_focus->SetIndexPostion(indexPos);
@@ -164,14 +173,29 @@ glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
 }
 
 void Map::ChangeBlockMaterial(glm::vec2 indexPos, int indexMap){
-    std::shared_ptr<Block> block = FindBlockByIndex(indexPos);
+    std::shared_ptr<Block> block = FindMapBlockByIndex(indexPos);
     block->SetIndexMaterial(indexMap, material_image[indexMap]);
 }
 
 std::shared_ptr<Block> Map::ChooseEventBlock(glm::vec2 indexPos){
-    std::shared_ptr<Block> block = FindBlockByIndex(indexPos);
+    std::shared_ptr<Block> block = FindMapBlockByIndex(indexPos);
 
     event_focus->SetIndexPostion(indexPos);
 
     return block;
+}
+
+Tool Map::ChooseTool(glm::vec2 indexPos){
+    if (indexPos == TOOL_START_INDEX){
+        event_focus->SetVisible(false);
+        tool_focus->SetIndexPostion(indexPos);
+        return Tool::Edit;
+    }
+    if (indexPos.x == TOOL_START_INDEX.x +1 && indexPos.y == TOOL_START_INDEX.y){
+        event_focus->SetVisible(true);
+        tool_focus->SetIndexPostion(indexPos);
+        return Tool::Event;
+    }
+
+    return  current_tool;
 }
