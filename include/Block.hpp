@@ -1,10 +1,18 @@
 #ifndef BLOCK_HPP
 #define BLOCK_HPP
 
+#include "Event.hpp"
 #include "Util/GameObject.hpp"
 #include "Util/Image.hpp"
 #include <glm/fwd.hpp>
 #include <memory>
+#include <vector>
+
+enum BlockType {
+    Map_Block,
+    Material,
+    ToolIcon
+};
 
 class Block : public Util::GameObject {
 
@@ -22,10 +30,17 @@ public:
 
     void SetStand(bool canStand) { stand = canStand; }
 
+    void SetBlockType(BlockType type) { block_type = type; }
+
 private:
+    std::vector<std::shared_ptr<BlockEvent>> event;
+
     glm::vec2 index_pos = {0,0};
     glm::int64 index_material = 0;
+
     bool stand = true;
+
+    BlockType block_type;
 };
 
 

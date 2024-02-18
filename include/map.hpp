@@ -5,9 +5,15 @@
 #include "Util/GameObject.hpp"
 #include "Util/Image.hpp"
 #include "config.hpp"
+#include <cstddef>
 #include <glm/fwd.hpp>
 #include <memory>
 #include <vector>
+
+enum Tool {
+    Edit,
+    Event
+};
 
 class Map : public Util::GameObject {
 
@@ -17,25 +23,56 @@ public:
     void Start();
 private:
 
+    // init map
     void LoadMaterial();
 
     void LoadEmptyMap();
 
-    std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap);
+    void LoadChooseMaterialFocus();
 
-    bool IsDrawRange(glm::vec2 indexPos);
+    void LoadChooseEventFocus();
+    
+    void LoadToolImage();
 
+    std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, std::shared_ptr<Util::Image> img = nullptr);
+    //tool
+
+
+    //edit map material
     glm::int64 ChooseMaterial(glm::vec2 indexPos);
 
     void ChangeBlockMaterial(glm::vec2 indexPos, int indexMap);
 
+    //event
+    std::shared_ptr<Block> ChooseEventBlock(glm::vec2 indexPos);
+
+    //
+    bool IsEditRange(glm::vec2 indexPos);
+
+    std::shared_ptr<Block> FindBlockByIndex(glm::vec2 indexPos);
+
+    //gameObject just img
     std::shared_ptr<Util::GameObject> material_focus = 
     std::make_shared<Util::GameObject>();
 
-    glm::int64 index_map = 0;
+    std::shared_ptr<Util::GameObject> event_focus = 
+    std::make_shared<Util::GameObject>();
+
+    std::vector<std::shared_ptr<Block>> tools;
+
+
+    Tool tool = Edit;
+    // focus
+    glm::int64 current_material_index_focus = 0;
+
+    Block current_event_focus;
 
     std::vector<std::vector<std::shared_ptr<Block>>> map;
 
+    std::vector<std::shared_ptr<Util::Image>> material_image;
+
+
+    // can set
     std::vector<std::string> material_path = 
     {
     "empty48.png","block48.png","block48R.png",
@@ -43,9 +80,6 @@ private:
     "block48.png","block48R.png"
     };
 
-    std::vector<std::shared_ptr<Util::Image>> material_image;
-
-    // can set
     glm::int64 BLOCK_SIZE = 48;
     glm::int64 MATERIAL_COL_NUM = 4;
     glm::vec2 MAP_SIZE = {20, 10};
@@ -75,6 +109,11 @@ private:
     MAP_START_INDEX.y-MAP_SIZE.y
     };
 
+    glm::vec2 TOOL_START_INDEX = {-13, -7};
+
+    glm::vec2 BLOCK_PIVOT ={
+        (BLOCK_SIZE/2) * (-1),
+        (BLOCK_SIZE/2) * (-1)};
 };
 
 #endif
