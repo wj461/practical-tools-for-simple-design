@@ -19,8 +19,10 @@ void Map::Start() {
     LoadChooseEventFocus();
     LoadChooseToolFocus();
     LoadChooseMaterialFocus();
+    LoadPageFocus();
     LoadEmptyMap();
     LoadToolImage();
+    LoadPageIcon();
 }
 
 void Map::Update() {
@@ -30,6 +32,7 @@ void Map::Update() {
     //Tool select
     if (Util::Input::IsLButtonEdge()) {
         current_tool = ChooseTool(index_pos);
+        current_page_index = ChoosePage(index_pos);
         LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
     }
 
@@ -50,7 +53,6 @@ void Map::Update() {
         }
         break;
     }
-
 }
 
 void Map::LoadEmptyMap(){
@@ -74,7 +76,7 @@ void Map::LoadMaterial(){
         glm::vec2 index_pos {floor(material_position.x/BLOCK_SIZE) +1 , floor(material_position.y/BLOCK_SIZE) - 1};
         std::string path = "../assets/sprites/" + material_path[i];
         material_image.push_back(std::make_shared<Util::Image>(path));
-        NewBlock(index_pos, i, BlockType::Material);
+        material_map.push_back(NewBlock(index_pos, i, BlockType::Material));
     }
 }
 
@@ -92,6 +94,26 @@ void Map::LoadChooseEventFocus(){
 void Map::LoadChooseToolFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
     tool_focus = NewBlock(TOOL_START_INDEX, 0, BlockType::Focus, UI_Z, img);
+}
+
+void Map::LoadPageFocus(){
+    auto img = std::make_shared<Util::Image>("../assets/sprites/focus24.png");
+    page_focus = NewBlock(MATERIAL_PAGE_START_INDEX, 0, BlockType::Focus, UI_Z, img);
+}
+
+void Map::LoadPageIcon(){
+    std::vector<std::string> img_path = {"page1.png", "page2.png"};
+
+    for (unsigned long i = 0; i<img_path.size(); ++i){
+        auto path = "../assets/sprites/" + img_path[i];
+        auto img = std::make_shared<Util::Image>(path);
+        pages.push_back(NewBlock(
+        {MATERIAL_PAGE_START_INDEX.x + i, MATERIAL_PAGE_START_INDEX.y},
+        0,
+        BlockType::ToolIcon,
+        MAP_Z,
+        img));
+    }
 }
 
 void Map::LoadToolImage(){
@@ -174,7 +196,9 @@ glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
 
 void Map::ChangeBlockMaterial(glm::vec2 indexPos, int indexMap){
     std::shared_ptr<Block> block = FindMapBlockByIndex(indexPos);
-    block->SetIndexMaterial(indexMap, material_image[indexMap]);
+    block->SetIndexMaterial(indexMap,
+    material_image[indexMap], 
+    material_map[indexMap]->GetStand());
 }
 
 std::shared_ptr<Block> Map::ChooseEventBlock(glm::vec2 indexPos){
@@ -198,4 +222,17 @@ Tool Map::ChooseTool(glm::vec2 indexPos){
     }
 
     return  current_tool;
+}
+
+glm::int64 Map::ChoosePage(glm::vec2 indexPos){
+    if (indexPos == MATERIAL_PAGE_START_INDEX){
+        page_focus->SetIndexPostion(indexPos);
+        return 0;
+    }
+    if (indexPos.x == MATERIAL_PAGE_START_INDEX.x +1 && indexPos.y == MATERIAL_PAGE_START_INDEX.y){
+        page_focus->SetIndexPostion(indexPos);
+        return 1;
+    }
+
+    return current_page_index;
 }

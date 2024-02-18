@@ -36,9 +36,15 @@ private:
 
     void LoadChooseToolFocus();
 
+    void LoadPageIcon();
+
+    void LoadPageFocus();
+
     std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, glm::int64 indexZ = MAP_Z, std::shared_ptr<Util::Image> img = nullptr);
     //tool
     Tool ChooseTool(glm::vec2 indexPos);
+
+    glm::int64 ChoosePage(glm::vec2 indexPos);
 
     //edit map material
     glm::int64 ChooseMaterial(glm::vec2 indexPos);
@@ -54,16 +60,19 @@ private:
     std::shared_ptr<Block> FindMapBlockByIndex(glm::vec2 indexPos);
 
     // focus
-    std::shared_ptr<Block> material_focus, event_focus, tool_focus;
+    std::shared_ptr<Block> material_focus, event_focus, tool_focus, page_focus;
 
-    std::vector<std::shared_ptr<Block>> tools;
+    std::vector<std::shared_ptr<Block>> tools, pages;
 
     // focus
     Tool current_tool = Tool::Edit;
     glm::int64 current_material_index = 0;
+    glm::int64 current_page_index = 0;
     std::shared_ptr<Block> current_event;
 
+
     std::vector<std::vector<std::shared_ptr<Block>>> map;
+    std::vector<std::shared_ptr<Block>> material_map;
 
     std::vector<std::shared_ptr<Util::Image>> material_image;
 
@@ -100,6 +109,8 @@ private:
     };
 
     glm::vec2 TOOL_START_INDEX = {-13, -7};
+
+    glm::vec2 MATERIAL_PAGE_START_INDEX = {-13, -6};
 
     glm::vec2 BLOCK_PIVOT ={
         (BLOCK_SIZE/2) * (-1),

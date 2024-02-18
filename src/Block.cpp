@@ -4,8 +4,9 @@
 #include <glm/fwd.hpp>
 #include <memory>
 
-void Block::SetIndexMaterial(glm::int64 index, std::shared_ptr<Util::Image> material){
+void Block::SetIndexMaterial(glm::int64 index, std::shared_ptr<Util::Image> material, bool canStand){
     index_material = index;
+    stand = canStand;
 
     this->SetDrawable(material);
 }
