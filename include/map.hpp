@@ -3,6 +3,7 @@
 
 #include "Block.hpp"
 #include "Util/GameObject.hpp"
+#include "Util/Image.hpp"
 #include "config.hpp"
 #include <glm/fwd.hpp>
 #include <memory>
@@ -41,6 +42,8 @@ private:
     "block48.png","block48R.png",
     "block48.png","block48R.png"
     };
+
+    std::vector<std::shared_ptr<Util::Image>> material_image;
 
     // can set
     glm::int64 BLOCK_SIZE = 48;

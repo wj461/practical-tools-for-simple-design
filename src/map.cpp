@@ -24,8 +24,8 @@ void Map::Start() {
     material_focus->SetZIndex(UI_Z);
     this->AddChild(material_focus);
 
-    LoadEmptyMap();
     LoadMaterial();
+    LoadEmptyMap();
 }
 
 void Map::Update() {
@@ -64,12 +64,13 @@ void Map::LoadMaterial(){
         };
 
         glm::vec2 index_pos {floor(material_position.x/BLOCK_SIZE) +1 , floor(material_position.y/BLOCK_SIZE) - 1};
+        std::string path = "../assets/sprites/" + material_path[i];
+        material_image.push_back(std::make_shared<Util::Image>(path));
         NewBlock(index_pos, i);
     }
 }
 
 std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, int indexMap){
-    std::string path = "../assets/sprites/" + material_path[indexMap];
     glm::vec2 translation {
     (indexPos.x * BLOCK_SIZE),
     (indexPos.y * BLOCK_SIZE)};
@@ -79,8 +80,7 @@ std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, int indexMap){
     block->SetPosition(translation);
     block->SetIndexPostion(indexPos);
 
-    block->SetDrawable(
-        std::make_shared<Util::Image>(path));
+    block->SetDrawable(material_image[indexMap]);
     block->SetPivot({(BLOCK_SIZE/2) * (-1),(BLOCK_SIZE/2) * (-1)});
     block->SetZIndex(MAP_Z);
 
@@ -124,7 +124,7 @@ void Map::ChangeBlockMaterial(glm::vec2 indexPos, int indexMap){
     for (std::vector<std::shared_ptr<Block>> blocks : map ){
         for (std::shared_ptr<Block> block : blocks ){
             if (block->GetIndexPostion() == indexPos){
-                block->SetIndexMaterial(indexMap, material_path[indexMap]);
+                block->SetIndexMaterial(indexMap, material_image[indexMap]);
             }
         }
     }

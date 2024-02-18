@@ -2,7 +2,9 @@
 #define BLOCK_HPP
 
 #include "Util/GameObject.hpp"
+#include "Util/Image.hpp"
 #include <glm/fwd.hpp>
+#include <memory>
 
 class Block : public Util::GameObject {
 
@@ -16,7 +18,7 @@ public:
 
     void SetIndexPostion(glm::vec2 index) { index_pos = index; }
 
-    void SetIndexMaterial(glm::int64 index, std::string fileName);
+    void SetIndexMaterial(glm::int64 index, std::shared_ptr<Util::Image> material);
 
     void SetStand(bool canStand) { stand = canStand; }
 
