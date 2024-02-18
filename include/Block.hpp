@@ -11,7 +11,8 @@
 enum BlockType {
     Map_Block,
     Material,
-    ToolIcon
+    ToolIcon,
+    Focus
 };
 
 class Block : public Util::GameObject {
@@ -24,7 +25,7 @@ public:
     glm::vec2 GetIndexPostion() { return index_pos;}
     int GetIndexMaterial() { return index_material;}
 
-    void SetIndexPostion(glm::vec2 index) { index_pos = index; }
+    void SetIndexPostion(glm::vec2 index);
 
     void SetIndexMaterial(glm::int64 index, std::shared_ptr<Util::Image> material);
 

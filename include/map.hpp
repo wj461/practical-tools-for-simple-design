@@ -34,7 +34,7 @@ private:
     
     void LoadToolImage();
 
-    std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, std::shared_ptr<Util::Image> img = nullptr);
+    std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, glm::int64 indexZ = MAP_Z, std::shared_ptr<Util::Image> img = nullptr);
     //tool
 
 
@@ -51,17 +51,12 @@ private:
 
     std::shared_ptr<Block> FindBlockByIndex(glm::vec2 indexPos);
 
-    //gameObject just img
-    std::shared_ptr<Util::GameObject> material_focus = 
-    std::make_shared<Util::GameObject>();
-
-    std::shared_ptr<Util::GameObject> event_focus = 
-    std::make_shared<Util::GameObject>();
+    std::shared_ptr<Block> material_focus, event_focus;
 
     std::vector<std::shared_ptr<Block>> tools;
 
 
-    Tool tool = Edit;
+    Tool tool = Tool::Event;
     // focus
     glm::int64 current_material_index_focus = 0;
 
@@ -79,10 +74,6 @@ private:
     "block48.png","block48R.png",
     "block48.png","block48R.png"
     };
-
-    glm::int64 BLOCK_SIZE = 48;
-    glm::int64 MATERIAL_COL_NUM = 4;
-    glm::vec2 MAP_SIZE = {20, 10};
 
     // can set
     glm::vec2 LEFT_TOP_POS = {

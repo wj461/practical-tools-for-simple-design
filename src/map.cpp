@@ -76,27 +76,13 @@ void Map::LoadMaterial(){
 }
 
 void Map::LoadChooseMaterialFocus(){
-    material_focus->SetDrawable(
-        std::make_shared<Util::Image>("../assets/sprites/focus.png")
-    );
-    material_focus->SetPivot(BLOCK_PIVOT);
-    material_focus->SetPosition({
-        MATERIAL_START_INDEX.x * BLOCK_SIZE,
-        MATERIAL_START_INDEX.y * BLOCK_SIZE});
-    material_focus->SetZIndex(UI_Z);
-    this->AddChild(material_focus);
+    auto img = std::make_shared<Util::Image>("../assets/sprites/focus.png");
+    material_focus = NewBlock(MATERIAL_START_INDEX, 0, BlockType::Focus, UI_Z, img );
 }
 
 void Map::LoadChooseEventFocus(){
-    event_focus->SetDrawable(
-        std::make_shared<Util::Image>("../assets/sprites/current_event.png")
-    );
-    event_focus->SetPivot(BLOCK_PIVOT);
-    event_focus->SetPosition({
-        MAP_START_INDEX.x * BLOCK_SIZE,
-        MAP_START_INDEX.y * BLOCK_SIZE});
-    event_focus->SetZIndex(UI_Z);
-    this->AddChild(event_focus);
+    auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
+    event_focus = NewBlock(MAP_START_INDEX, 0, BlockType::Focus, UI_Z, img);
 }
 
 void Map::LoadToolImage(){
@@ -112,20 +98,13 @@ void Map::LoadToolImage(){
         auto tool_block = NewBlock(
         {TOOL_START_INDEX.x + i, TOOL_START_INDEX.y},
         0, BlockType::ToolIcon,
-        tool_icon);
+        MAP_Z, tool_icon);
         tools.push_back(tool_block);
     }
 }
 
-std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, std::shared_ptr<Util::Image> img){
-    glm::vec2 translation {
-    (indexPos.x * BLOCK_SIZE),
-    (indexPos.y * BLOCK_SIZE)};
-
+std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, glm::int64 indexZ, std::shared_ptr<Util::Image> img){
     auto block = std::make_shared<Block>();
-
-    block->SetPosition(translation);
-    block->SetIndexPostion(indexPos);
 
     if (img != nullptr){
         block->SetDrawable(img);
@@ -133,8 +112,10 @@ std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, int indexMap, BlockType
     else {
         block->SetDrawable(material_image[indexMap]);
     }
+
+    block->SetIndexPostion(indexPos);
     block->SetPivot(BLOCK_PIVOT);
-    block->SetZIndex(MAP_Z);
+    block->SetZIndex(indexZ);
     block->SetBlockType(type);
 
     this->AddChild(block);
@@ -177,9 +158,7 @@ glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
         return current_material_index_focus;
     }
 
-    material_focus->SetPosition({
-    indexPos.x * BLOCK_SIZE,
-    indexPos.y * BLOCK_SIZE});
+    material_focus->SetIndexPostion(indexPos);
 
     return material_index;
 }
@@ -192,9 +171,7 @@ void Map::ChangeBlockMaterial(glm::vec2 indexPos, int indexMap){
 std::shared_ptr<Block> Map::ChooseEventBlock(glm::vec2 indexPos){
     std::shared_ptr<Block> block = FindBlockByIndex(indexPos);
 
-    event_focus->SetPosition({
-    indexPos.x * BLOCK_SIZE,
-    indexPos.y * BLOCK_SIZE});
+    event_focus->SetIndexPostion(indexPos);
 
     return block;
 }
