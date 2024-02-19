@@ -97,18 +97,18 @@ void Map::LoadMaterial(){
 
 void Map::LoadChooseMaterialFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/focus.png");
-    material_focus = NewBlock(MATERIAL_START_INDEX, {0 ,0}, BlockType::Focus, UI_Z, img );
+    material_focus = NewBlock(MATERIAL_START_INDEX, {0 ,0}, BlockType::Focus, FOCUS_Z, img );
 }
 
 void Map::LoadChooseEventFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
-    event_focus = NewBlock(MAP_START_INDEX, {0, 0}, BlockType::Focus, UI_Z, img);
+    event_focus = NewBlock(MAP_START_INDEX, {0, 0}, BlockType::Focus, FOCUS_Z, img);
     event_focus->SetVisible(false);
 }
 
 void Map::LoadChooseToolFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
-    tool_focus = NewBlock(TOOL_START_INDEX, {0, 0}, BlockType::Focus, UI_Z, img);
+    tool_focus = NewBlock(TOOL_START_INDEX, {0, 0}, BlockType::Focus, FOCUS_Z, img);
 }
 
 void Map::LoadPageFocus(){

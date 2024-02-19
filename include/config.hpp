@@ -15,6 +15,7 @@ constexpr unsigned int WINDOW_WIDTH = 1280;
 constexpr unsigned int WINDOW_HEIGHT = 720;
 
 constexpr unsigned int UI_Z = 6;
+constexpr unsigned int FOCUS_Z = 100;
 constexpr unsigned int MAP_Z = 5;
 constexpr unsigned int BG_Z = 4;
 
