@@ -21,6 +21,9 @@ constexpr unsigned int BG_Z = 4;
 constexpr int BLOCK_SIZE = 48;
 constexpr glm::vec2 MAP_SIZE = {20, 10};
 constexpr int MATERIAL_COL_NUM = 4;
+constexpr glm::vec2 BLOCK_PIVOT ={
+        (BLOCK_SIZE/2) * (-1),
+        (BLOCK_SIZE/2) * (-1)};
 
 constexpr Util::Logger::Level DEFAULT_LOG_LEVEL = Util::Logger::Level::DEBUG;
 

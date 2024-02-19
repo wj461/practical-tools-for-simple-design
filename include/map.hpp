@@ -40,14 +40,16 @@ private:
 
     void LoadPageFocus();
 
-    std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, glm::int64 indexZ = MAP_Z, std::shared_ptr<Util::Image> img = nullptr);
+    std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, glm::vec2 indexMap = {0, 0}, BlockType type = BlockType::Map_Block, glm::int64 indexZ = MAP_Z, std::shared_ptr<Util::Image> img = nullptr);
     //tool
     Tool ChooseTool(glm::vec2 indexPos);
 
     glm::int64 ChoosePage(glm::vec2 indexPos);
 
+    void VisibleCurrentPageMaterial(glm::int64 currentPage);
+
     //edit map material
-    glm::int64 ChooseMaterial(glm::vec2 indexPos);
+    glm::vec2 ChooseMaterial(glm::vec2 indexPos, glm::int64 currentPage);
 
     void ChangeBlockMaterial(glm::vec2 indexPos, int indexMap);
 
@@ -59,6 +61,7 @@ private:
 
     std::shared_ptr<Block> FindMapBlockByIndex(glm::vec2 indexPos);
 
+    std::shared_ptr<Util::GameObject> test = std::make_shared<Util::GameObject>();
     // focus
     std::shared_ptr<Block> material_focus, event_focus, tool_focus, page_focus;
 
@@ -66,22 +69,21 @@ private:
 
     // focus
     Tool current_tool = Tool::Edit;
-    glm::int64 current_material_index = 0;
+    glm::vec2 current_material_index = {0, 0};
     glm::int64 current_page_index = 0;
     std::shared_ptr<Block> current_event;
 
 
-    std::vector<std::vector<std::shared_ptr<Block>>> map;
-    std::vector<std::shared_ptr<Block>> material_map;
+    std::vector<std::vector<std::shared_ptr<Block>>> map, material_map;
 
-    std::vector<std::shared_ptr<Util::Image>> material_image;
+    std::vector<std::vector<std::shared_ptr<Util::Image>>> material_image;
 
 
     // can set
-    std::vector<std::string> material_path = 
-    {
-    "empty48.png","block48.png","block48R.png"
-    };
+    std::vector<std::vector<std::string>> material_path = {
+    { "Blank.png","empty48.png","block48.png","block48R.png", "blockHG.png" },
+    { "Blank.png","empty48.png","block48R.png", "blockHG.png", "block24P.png" },
+    { "Blank.png","empty48.png","block24P.png", "blockHG.png" }};
 
     // can set
     glm::vec2 LEFT_TOP_POS = {
@@ -112,9 +114,6 @@ private:
 
     glm::vec2 MATERIAL_PAGE_START_INDEX = {-13, -6};
 
-    glm::vec2 BLOCK_PIVOT ={
-        (BLOCK_SIZE/2) * (-1),
-        (BLOCK_SIZE/2) * (-1)};
 };
 
 #endif

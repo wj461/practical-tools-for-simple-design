@@ -33,6 +33,7 @@ void Map::Update() {
     if (Util::Input::IsLButtonEdge()) {
         current_tool = ChooseTool(index_pos);
         current_page_index = ChoosePage(index_pos);
+        VisibleCurrentPageMaterial(current_page_index);
         LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
     }
 
@@ -40,11 +41,11 @@ void Map::Update() {
     case Edit:
         // edit map
         if (Util::Input::IsLButtonDown() && IsEditRange(index_pos)){
-            ChangeBlockMaterial(index_pos, current_material_index);
+            ChangeBlockMaterial(index_pos, current_material_index.y);
         }
         // chang target material
         else if (Util::Input::IsLButtonEdge()){
-            current_material_index = ChooseMaterial(index_pos);
+            current_material_index = ChooseMaterial(index_pos, current_page_index);
         }
         break;
     case Event:
@@ -60,7 +61,12 @@ void Map::LoadEmptyMap(){
         std::vector<std::shared_ptr<Block>> tempVector;
         for (glm::int64 x = 0; x < MAP_SIZE.x; x++){
             glm::vec2 index_pos = {MAP_START_INDEX.x+x ,MAP_START_INDEX.y-y };
-            tempVector.push_back(NewBlock(index_pos, 0, BlockType::Map_Block));
+            auto block = NewBlock(index_pos, {0, 0}, BlockType::Map_Block);
+            for (unsigned long i = 0; i< material_path.size(); ++i){
+                block->CreatNewZBlock();
+            }
+            block->SetIndexMaterial({0,1}, material_image[0][1]);
+            tempVector.push_back(block);
         }
         map.push_back(tempVector);
     }
@@ -68,48 +74,57 @@ void Map::LoadEmptyMap(){
 
 void Map::LoadMaterial(){
     for (unsigned long i = 0; i < material_path.size(); ++i){
-        glm::vec2 material_position = {
-        LEFT_TOP_POS.x + ((i % MATERIAL_COL_NUM) * BLOCK_SIZE),
-        LEFT_TOP_POS.y - (glm::int64(i / MATERIAL_COL_NUM) * BLOCK_SIZE),
-        };
+        std::vector<std::shared_ptr<Block>> temp;
+        std::vector<std::shared_ptr<Util::Image>> temp_img;
+        material_image.push_back(temp_img);
+        for (unsigned long j = 0; j< material_path[i].size(); ++j){
+            glm::vec2 material_position = {
+            LEFT_TOP_POS.x + ((j % MATERIAL_COL_NUM) * BLOCK_SIZE),
+            LEFT_TOP_POS.y - (glm::int64(j / MATERIAL_COL_NUM) * BLOCK_SIZE),
+            };
 
-        glm::vec2 index_pos {floor(material_position.x/BLOCK_SIZE) +1 , floor(material_position.y/BLOCK_SIZE) - 1};
-        std::string path = "../assets/sprites/" + material_path[i];
-        material_image.push_back(std::make_shared<Util::Image>(path));
-        material_map.push_back(NewBlock(index_pos, i, BlockType::Material));
+            glm::vec2 index_pos {floor(material_position.x/BLOCK_SIZE) +1 , floor(material_position.y/BLOCK_SIZE) - 1};
+            std::string path = "../assets/sprites/" + material_path[i][j];
+            auto img = std::make_shared<Util::Image>(path);
+            temp_img.push_back(img);
+            material_image[i] = temp_img;
+            temp.push_back(NewBlock(index_pos, {i,j}, BlockType::Material));
+        }
+        material_map.push_back(temp);
     }
+    VisibleCurrentPageMaterial(0);
 }
 
 void Map::LoadChooseMaterialFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/focus.png");
-    material_focus = NewBlock(MATERIAL_START_INDEX, 0, BlockType::Focus, UI_Z, img );
+    material_focus = NewBlock(MATERIAL_START_INDEX, {0 ,0}, BlockType::Focus, UI_Z, img );
 }
 
 void Map::LoadChooseEventFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
-    event_focus = NewBlock(MAP_START_INDEX, 0, BlockType::Focus, UI_Z, img);
+    event_focus = NewBlock(MAP_START_INDEX, {0, 0}, BlockType::Focus, UI_Z, img);
     event_focus->SetVisible(false);
 }
 
 void Map::LoadChooseToolFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
-    tool_focus = NewBlock(TOOL_START_INDEX, 0, BlockType::Focus, UI_Z, img);
+    tool_focus = NewBlock(TOOL_START_INDEX, {0, 0}, BlockType::Focus, UI_Z, img);
 }
 
 void Map::LoadPageFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/focus24.png");
-    page_focus = NewBlock(MATERIAL_PAGE_START_INDEX, 0, BlockType::Focus, UI_Z, img);
+    page_focus = NewBlock(MATERIAL_PAGE_START_INDEX, {0, 0}, BlockType::Focus, UI_Z, img);
 }
 
 void Map::LoadPageIcon(){
-    std::vector<std::string> img_path = {"page1.png", "page2.png"};
+    std::vector<std::string> img_path = {"page1.png", "page2.png", "page2.png"};
 
     for (unsigned long i = 0; i<img_path.size(); ++i){
         auto path = "../assets/sprites/" + img_path[i];
         auto img = std::make_shared<Util::Image>(path);
         pages.push_back(NewBlock(
         {MATERIAL_PAGE_START_INDEX.x + i, MATERIAL_PAGE_START_INDEX.y},
-        0,
+        {0, 0},
         BlockType::ToolIcon,
         MAP_Z,
         img));
@@ -128,20 +143,20 @@ void Map::LoadToolImage(){
 
         auto tool_block = NewBlock(
         {TOOL_START_INDEX.x + i, TOOL_START_INDEX.y},
-        0, BlockType::ToolIcon,
+        {0, 0}, BlockType::ToolIcon,
         MAP_Z, tool_icon);
         tools.push_back(tool_block);
     }
 }
 
-std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, int indexMap, BlockType type, glm::int64 indexZ, std::shared_ptr<Util::Image> img){
+std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, glm::vec2 indexMap, BlockType type, glm::int64 indexZ, std::shared_ptr<Util::Image> img){
     auto block = std::make_shared<Block>();
 
     if (img != nullptr){
         block->SetDrawable(img);
     }
     else {
-        block->SetDrawable(material_image[indexMap]);
+        block->SetDrawable(material_image[indexMap.x][indexMap.y]);
     }
 
     block->SetIndexPostion(indexPos);
@@ -176,7 +191,8 @@ std::shared_ptr<Block> Map::FindMapBlockByIndex(glm::vec2 indexPos){
     return nullptr;
 }
 
-glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
+glm::vec2 Map::ChooseMaterial(glm::vec2 indexPos, glm::int64 currentPage){
+    //width
     if (glm::int64(indexPos.x - MATERIAL_START_INDEX.x) >= MATERIAL_COL_NUM){
         return current_material_index;
     }
@@ -185,20 +201,22 @@ glm::int64 Map::ChooseMaterial(glm::vec2 indexPos){
     (glm::int64(indexPos.x) - MATERIAL_START_INDEX.x) +
     (MATERIAL_COL_NUM * (MATERIAL_START_INDEX.y - (glm::int64(indexPos.y))));
 
-    if (material_index >= glm::int64(material_path.size())){
+    LOG_DEBUG("{}", material_index);
+    if (material_index >= glm::int64(material_path[currentPage].size()) ||
+    material_index < 0){
         return current_material_index;
     }
 
     material_focus->SetIndexPostion(indexPos);
 
-    return material_index;
+    return {currentPage, material_index};
 }
 
 void Map::ChangeBlockMaterial(glm::vec2 indexPos, int indexMap){
     std::shared_ptr<Block> block = FindMapBlockByIndex(indexPos);
-    block->SetIndexMaterial(indexMap,
-    material_image[indexMap], 
-    material_map[indexMap]->GetStand());
+    block->SetIndexMaterial({current_page_index,indexMap},
+    material_image[current_page_index][indexMap], 
+    material_map[current_page_index][indexMap]->GetStand());
 }
 
 std::shared_ptr<Block> Map::ChooseEventBlock(glm::vec2 indexPos){
@@ -225,14 +243,26 @@ Tool Map::ChooseTool(glm::vec2 indexPos){
 }
 
 glm::int64 Map::ChoosePage(glm::vec2 indexPos){
-    if (indexPos == MATERIAL_PAGE_START_INDEX){
+    glm::int64 index = indexPos.x-MATERIAL_PAGE_START_INDEX.x;
+
+    if (index <= glm::int64(material_path.size()) && indexPos.y == MATERIAL_PAGE_START_INDEX.y){
         page_focus->SetIndexPostion(indexPos);
-        return 0;
-    }
-    if (indexPos.x == MATERIAL_PAGE_START_INDEX.x +1 && indexPos.y == MATERIAL_PAGE_START_INDEX.y){
-        page_focus->SetIndexPostion(indexPos);
-        return 1;
+        current_material_index = ChooseMaterial(MATERIAL_START_INDEX, index);
+        return index;
     }
 
     return current_page_index;
+}
+
+void Map::VisibleCurrentPageMaterial(glm::int64 currentPage){
+    for (auto page : material_map){
+        for(auto material : page){
+            material->SetVisible(false);
+        }
+    }
+
+    auto current_page = material_map[currentPage];
+    for(auto material : current_page){
+        material->SetVisible(true);
+    }
 }

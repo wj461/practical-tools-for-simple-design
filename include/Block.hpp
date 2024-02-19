@@ -22,16 +22,19 @@ public:
 
     void Start();
 
+    void CreatNewZBlock();
+
+
     glm::vec2 GetIndexPostion() { return index_pos;}
 
-    int GetIndexMaterial() { return index_material;}
+    // int GetIndexMaterial() { return index_material;}
 
     bool GetStand() { return stand; }
 
 
     void SetIndexPostion(glm::vec2 index);
 
-    void SetIndexMaterial(glm::int64 index, std::shared_ptr<Util::Image> material, bool canStand = true);
+    void SetIndexMaterial(glm::vec2 index, std::shared_ptr<Util::Image> material, bool canStand = true);
 
     void SetStand(bool canStand) { stand = canStand; }
 
@@ -40,8 +43,10 @@ public:
 private:
     std::vector<std::shared_ptr<BlockEvent>> event;
 
+    std::vector<std::shared_ptr<Util::GameObject>> zBlock;
+    std::vector<glm::int64> index_material;
+
     glm::vec2 index_pos = {0,0};
-    glm::int64 index_material = 0;
 
     bool stand = true;
 
