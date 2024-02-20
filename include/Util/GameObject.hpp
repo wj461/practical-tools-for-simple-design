@@ -97,7 +97,7 @@ public:
      *
      * @param pivot The pivot of the game object.
      */
-    void SetPivot(glm::vec2 pivot) { m_Pivot = pivot; }
+    // void SetPivot(glm::vec2 pivot) { m_Pivot = pivot; }
 
     void SetPivotToLeftTop() { m_Pivot = {(-1) * glm::int64(m_Drawable->GetSize().x/2), (-1) *glm::int64(m_Drawable->GetSize().y/2)}; }
 

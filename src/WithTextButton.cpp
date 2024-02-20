@@ -18,9 +18,6 @@ void WithTextButton::Init(std::string font, const int size) {
 void WithTextButton::SetTextPostionToCenter(){
     auto position = this->GetTransform().translation;
 
-    LOG_DEBUG("size {} {}", 
-    m_Text->GetSize().x, m_Text->GetSize().y);
-
     m_TextObject->SetPosition({
     position.x + this->GetSize().x/2 + 9,
     position.y + this->GetSize().y/2

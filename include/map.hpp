@@ -89,11 +89,11 @@ private:
     { "Blank.png","empty48.png","block48R.png", "blockHG.png", "block24P.png" },
     { "Blank.png","empty48.png","block24P.png", "blockHG.png" }};
 
-    // can set
     glm::vec2 LEFT_TOP_POS = {
         glm::int64(WINDOW_WIDTH/2) * (-1),
         glm::int64(WINDOW_HEIGHT/2) };
 
+    // can set
     glm::vec2 MATERIAL_START_INDEX = {
         glm::int64(LEFT_TOP_POS.x/BLOCK_SIZE),
         glm::int64(LEFT_TOP_POS.y/BLOCK_SIZE) -1
@@ -101,7 +101,7 @@ private:
 
     // can set
     glm::vec2 MAP_START_POS ={
-        (LEFT_TOP_POS.x)+240,
+        (LEFT_TOP_POS.x)+((MATERIAL_COL_NUM + 1) * BLOCK_SIZE),
         (WINDOW_HEIGHT/2) };
 
     glm::vec2 MAP_START_INDEX = {
@@ -118,6 +118,7 @@ private:
 
     glm::vec2 MATERIAL_PAGE_START_INDEX = {-13, -6};
 
+    std::string SPRITES_PATH = "../assets/sprites/";
 };
 
 #endif

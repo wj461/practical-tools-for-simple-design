@@ -86,7 +86,7 @@ void Map::LoadMaterial(){
             };
 
             glm::vec2 index_pos {floor(material_position.x/BLOCK_SIZE) +1 , floor(material_position.y/BLOCK_SIZE) - 1};
-            std::string path = "../assets/sprites/" + material_path[i][j];
+            std::string path = SPRITES_PATH + material_path[i][j];
             auto img = std::make_shared<Util::Image>(path);
             temp_img.push_back(img);
             material_image[i] = temp_img;
@@ -98,23 +98,27 @@ void Map::LoadMaterial(){
 }
 
 void Map::LoadChooseMaterialFocus(){
-    auto img = std::make_shared<Util::Image>("../assets/sprites/focus.png");
+    auto path = SPRITES_PATH + "focus.png";
+    auto img = std::make_shared<Util::Image>(path);
     material_focus = NewBlock(MATERIAL_START_INDEX, {0 ,0}, BlockType::Focus, FOCUS_Z, img );
 }
 
 void Map::LoadChooseEventFocus(){
-    auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
+    auto path = SPRITES_PATH + "current_event.png";
+    auto img = std::make_shared<Util::Image>(path);
     event_focus = NewBlock(MAP_START_INDEX, {0, 0}, BlockType::Focus, FOCUS_Z, img);
     event_focus->SetVisible(false);
 }
 
 void Map::LoadChooseToolFocus(){
-    auto img = std::make_shared<Util::Image>("../assets/sprites/current_event.png");
+    auto path = SPRITES_PATH + "current_event.png";
+    auto img = std::make_shared<Util::Image>(path);
     tool_focus = NewBlock(TOOL_START_INDEX, {0, 0}, BlockType::Focus, FOCUS_Z, img);
 }
 
 void Map::LoadPageFocus(){
-    auto img = std::make_shared<Util::Image>("../assets/sprites/focus24.png");
+    auto path = SPRITES_PATH + "focus24.png";
+    auto img = std::make_shared<Util::Image>(path);
     page_focus = NewBlock(MATERIAL_PAGE_START_INDEX, {0, 0}, BlockType::Focus, FOCUS_Z, img);
 }
 
@@ -133,7 +137,7 @@ void Map::LoadToolImage(){
     };
 
     for (unsigned long i = 0; i < tool_img_names.size(); ++i){
-        auto icon_path = "../assets/sprites/" + tool_img_names[i];
+        auto icon_path = SPRITES_PATH + tool_img_names[i];
         std::shared_ptr<Util::Image> tool_icon =
             std::make_shared<Util::Image>(icon_path);
 
@@ -156,7 +160,6 @@ std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, glm::vec2 indexMap, Blo
     }
 
     block->SetIndexPostion(indexPos);
-    // block->SetPivot(BLOCK_PIVOT);
     block->SetPivotToLeftTop();
     block->SetZIndex(indexZ);
     block->SetBlockType(type);
@@ -168,13 +171,13 @@ std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, glm::vec2 indexMap, Blo
 
 std::shared_ptr<WithTextButton> Map::NewTextButton(glm::vec2 indexPos, std::string text) {
     auto block = std::make_shared<WithTextButton>();
-    auto button_bg = std::make_shared<Util::Image>("../assets/sprites/page2.png");
+    auto path = SPRITES_PATH + "page2.png";
+    auto button_bg = std::make_shared<Util::Image>(path);
 
 
     block->SetDrawable(button_bg);
 
     block->SetIndexPostion(indexPos);
-    // block->SetPivot(BLOCK_PIVOT);
     block->SetPivotToLeftTop();
     block->SetZIndex(UI_Z);
     block->SetBlockType(BlockType::ToolIcon);
@@ -220,7 +223,6 @@ glm::vec2 Map::ChooseMaterial(glm::vec2 indexPos, glm::int64 currentPage){
     (glm::int64(indexPos.x) - MATERIAL_START_INDEX.x) +
     (MATERIAL_COL_NUM * (MATERIAL_START_INDEX.y - (glm::int64(indexPos.y))));
 
-    LOG_DEBUG("{}", material_index);
     if (material_index >= glm::int64(material_path[currentPage].size()) ||
     material_index < 0){
         return current_material_index;
@@ -264,7 +266,6 @@ Tool Map::ChooseTool(glm::vec2 indexPos){
 glm::int64 Map::ChoosePage(glm::vec2 indexPos){
     glm::int64 index = indexPos.x-MATERIAL_PAGE_START_INDEX.x;
 
-    LOG_DEBUG("page index {}",index);
     if (index < glm::int64(material_path.size()) && indexPos.y == MATERIAL_PAGE_START_INDEX.y){
         page_focus->SetIndexPostion(indexPos);
         current_material_index = ChooseMaterial(MATERIAL_START_INDEX, index);
