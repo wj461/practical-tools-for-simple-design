@@ -16,6 +16,12 @@ enum Tool {
     Event
 };
 
+struct MaterialData {
+    std::string path;
+    bool stand;
+} ;
+
+
 class Map : public Util::GameObject {
 
 public:
@@ -84,10 +90,11 @@ private:
 
 
     // can set
-    std::vector<std::vector<std::string>> material_path = {
-    { "Blank.png","empty48.png","block48.png","block48R.png", "blockHG.png" },
-    { "Blank.png","empty48.png","block48R.png", "blockHG.png", "block24P.png" },
-    { "Blank.png","empty48.png","block24P.png", "blockHG.png" }};
+    std::vector<std::vector<MaterialData>> material_path = {
+    { {"Blank.png",true},{"empty48.png", false},{"block48.png", true},{"block48R.png", true}, {"blockHG.png", true} },
+    { {"Blank.png",true},{"block48.png", true},{"block48R.png", true}, {"blockHG.png", true} },
+    { {"Blank.png",true},{"block48R.png", true}, {"blockHG.png", true}, {"block24P.png", true} }
+    };
 
     glm::vec2 LEFT_TOP_POS = {
         glm::int64(WINDOW_WIDTH/2) * (-1),

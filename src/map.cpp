@@ -86,11 +86,14 @@ void Map::LoadMaterial(){
             };
 
             glm::vec2 index_pos {floor(material_position.x/BLOCK_SIZE) +1 , floor(material_position.y/BLOCK_SIZE) - 1};
-            std::string path = SPRITES_PATH + material_path[i][j];
+            std::string path = SPRITES_PATH + material_path[i][j].path;
             auto img = std::make_shared<Util::Image>(path);
             temp_img.push_back(img);
             material_image[i] = temp_img;
-            temp.push_back(NewBlock(index_pos, {i,j}, BlockType::Material));
+
+            auto block = NewBlock(index_pos, {i,j}, BlockType::Material);
+            block->SetStand(material_path[i][j].stand);
+            temp.push_back(block);
         }
         material_map.push_back(temp);
     }
