@@ -30,7 +30,7 @@ void Block::CreatNewZBlock(){
     auto block =  std::make_shared<Util::GameObject>();
     block->SetDrawable(std::make_shared<Util::Image>("../assets/sprites/Blank.png"));
     block->SetPosition(translation);
-    block->SetPivot(BLOCK_PIVOT);
+    block->SetPivotToLeftTop();
     block->SetZIndex(MAP_Z + zBlock.size()+1);
     zBlock.push_back(block);
     this->AddChild(block);

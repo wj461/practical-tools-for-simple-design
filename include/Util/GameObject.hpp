@@ -80,6 +80,9 @@ public:
         return m_Drawable->GetSize() * m_Transform.scale;
     };
 
+    glm::vec2 GetSize() const {
+        return m_Drawable->GetSize();
+    };
     /**
      * @brief Get the children of the game object.
      *
@@ -95,6 +98,8 @@ public:
      * @param pivot The pivot of the game object.
      */
     void SetPivot(glm::vec2 pivot) { m_Pivot = pivot; }
+
+    void SetPivotToLeftTop() { m_Pivot = {(-1) * glm::int64(m_Drawable->GetSize().x/2), (-1) *glm::int64(m_Drawable->GetSize().y/2)}; }
 
     /**
      * @brief Set the z-index of the game object.

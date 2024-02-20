@@ -4,11 +4,13 @@
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Logger.hpp"
+#include "WithTextButton.hpp"
 #include "config.hpp"
 #include <cmath>
 #include <glm/detail/qualifier.hpp>
 #include <glm/fwd.hpp>
 #include <memory>
+#include <spdlog/fmt/bundled/core.h>
 #include <spdlog/spdlog.h>
 #include <string>
 #include <unistd.h>
@@ -35,6 +37,7 @@ void Map::Update() {
         current_page_index = ChoosePage(index_pos);
         VisibleCurrentPageMaterial(current_page_index);
         LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
+        LOG_DEBUG(" pos {},{}", (index_pos.x)*BLOCK_SIZE, (index_pos.y)*BLOCK_SIZE);
     }
 
     switch (current_tool) {
@@ -113,21 +116,15 @@ void Map::LoadChooseToolFocus(){
 
 void Map::LoadPageFocus(){
     auto img = std::make_shared<Util::Image>("../assets/sprites/focus24.png");
-    page_focus = NewBlock(MATERIAL_PAGE_START_INDEX, {0, 0}, BlockType::Focus, UI_Z, img);
+    page_focus = NewBlock(MATERIAL_PAGE_START_INDEX, {0, 0}, BlockType::Focus, FOCUS_Z, img);
 }
 
 void Map::LoadPageIcon(){
-    std::vector<std::string> img_path = {"page1.png", "page2.png", "page2.png"};
-
-    for (unsigned long i = 0; i<img_path.size(); ++i){
-        auto path = "../assets/sprites/" + img_path[i];
-        auto img = std::make_shared<Util::Image>(path);
-        pages.push_back(NewBlock(
-        {MATERIAL_PAGE_START_INDEX.x + i, MATERIAL_PAGE_START_INDEX.y},
-        {0, 0},
-        BlockType::ToolIcon,
-        MAP_Z,
-        img));
+    for (unsigned long i = 0; i<material_image.size(); ++i){
+        auto text = std::to_string(i + 1);
+        pages.push_back(NewTextButton(
+        {MATERIAL_PAGE_START_INDEX.x + i, MATERIAL_PAGE_START_INDEX.y}, 
+        text));
     }
 }
 
@@ -138,7 +135,7 @@ void Map::LoadToolImage(){
 
     for (unsigned long i = 0; i < tool_img_names.size(); ++i){
         auto icon_path = "../assets/sprites/" + tool_img_names[i];
-        auto tool_icon =
+        std::shared_ptr<Util::Image> tool_icon =
             std::make_shared<Util::Image>(icon_path);
 
         auto tool_block = NewBlock(
@@ -160,9 +157,32 @@ std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, glm::vec2 indexMap, Blo
     }
 
     block->SetIndexPostion(indexPos);
-    block->SetPivot(BLOCK_PIVOT);
+    // block->SetPivot(BLOCK_PIVOT);
+    block->SetPivotToLeftTop();
     block->SetZIndex(indexZ);
     block->SetBlockType(type);
+
+    this->AddChild(block);
+
+    return block;
+}
+
+std::shared_ptr<WithTextButton> Map::NewTextButton(glm::vec2 indexPos, std::string text) {
+    auto block = std::make_shared<WithTextButton>();
+    auto button_bg = std::make_shared<Util::Image>("../assets/sprites/page1.png");
+
+
+    block->SetDrawable(button_bg);
+
+    block->SetIndexPostion(indexPos);
+    // block->SetPivot(BLOCK_PIVOT);
+    block->SetPivotToLeftTop();
+    block->SetZIndex(UI_Z);
+    block->SetBlockType(BlockType::ToolIcon);
+
+    block->Init("../assets/fonts/Inter.ttf", 20);
+    block->SetTextPostionToCenter();
+    block->SetText(text);
 
     this->AddChild(block);
 

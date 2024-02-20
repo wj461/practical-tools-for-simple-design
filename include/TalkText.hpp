@@ -19,6 +19,8 @@ public:
     void Start();
 
     void SetText(std::string inputText);
+
+    void SetTextNow(std::string inputText);
 private:
     std::string text = "";
     std::string currentText = " ";

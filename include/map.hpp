@@ -4,6 +4,7 @@
 #include "Block.hpp"
 #include "Util/GameObject.hpp"
 #include "Util/Image.hpp"
+#include "WithTextButton.hpp"
 #include "config.hpp"
 #include <cstddef>
 #include <glm/fwd.hpp>
@@ -41,6 +42,8 @@ private:
     void LoadPageFocus();
 
     std::shared_ptr<Block> NewBlock(glm::vec2 indexPos, glm::vec2 indexMap = {0, 0}, BlockType type = BlockType::Map_Block, glm::int64 indexZ = MAP_Z, std::shared_ptr<Util::Image> img = nullptr);
+
+    std::shared_ptr<WithTextButton> NewTextButton(glm::vec2 indexPos, std::string text);
     //tool
     Tool ChooseTool(glm::vec2 indexPos);
 
@@ -65,7 +68,8 @@ private:
     // focus
     std::shared_ptr<Block> material_focus, event_focus, tool_focus, page_focus;
 
-    std::vector<std::shared_ptr<Block>> tools, pages;
+    std::vector<std::shared_ptr<Block>> tools;
+    std::vector<std::shared_ptr<WithTextButton>> pages;
 
     // focus
     Tool current_tool = Tool::Edit;
