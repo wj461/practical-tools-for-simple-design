@@ -37,7 +37,6 @@ void Map::Update() {
         current_page_index = ChoosePage(index_pos);
         VisibleCurrentPageMaterial(current_page_index);
         LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
-        LOG_DEBUG(" pos {},{}", (index_pos.x)*BLOCK_SIZE, (index_pos.y)*BLOCK_SIZE);
     }
 
     switch (current_tool) {
@@ -169,7 +168,7 @@ std::shared_ptr<Block> Map::NewBlock(glm::vec2 indexPos, glm::vec2 indexMap, Blo
 
 std::shared_ptr<WithTextButton> Map::NewTextButton(glm::vec2 indexPos, std::string text) {
     auto block = std::make_shared<WithTextButton>();
-    auto button_bg = std::make_shared<Util::Image>("../assets/sprites/page1.png");
+    auto button_bg = std::make_shared<Util::Image>("../assets/sprites/page2.png");
 
 
     block->SetDrawable(button_bg);
@@ -265,7 +264,8 @@ Tool Map::ChooseTool(glm::vec2 indexPos){
 glm::int64 Map::ChoosePage(glm::vec2 indexPos){
     glm::int64 index = indexPos.x-MATERIAL_PAGE_START_INDEX.x;
 
-    if (index <= glm::int64(material_path.size()) && indexPos.y == MATERIAL_PAGE_START_INDEX.y){
+    LOG_DEBUG("page index {}",index);
+    if (index < glm::int64(material_path.size()) && indexPos.y == MATERIAL_PAGE_START_INDEX.y){
         page_focus->SetIndexPostion(indexPos);
         current_material_index = ChooseMaterial(MATERIAL_START_INDEX, index);
         return index;
