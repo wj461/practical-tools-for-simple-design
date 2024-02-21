@@ -12,7 +12,7 @@
 void App::Start() {
     LOG_TRACE("Start");
     m_TalkText =
-        std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 100);
+        std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 20);
     m_TalkText->SetZIndex(UI_Z);
     m_TalkText->Start();
 

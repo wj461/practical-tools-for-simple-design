@@ -37,7 +37,7 @@ void Map::Update() {
         current_tool = ChooseTool(index_pos);
         current_page_index = ChoosePage(index_pos);
         VisibleCurrentPageMaterial(current_page_index);
-        // LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
+        LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
     }
 
     switch (current_tool) {

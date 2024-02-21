@@ -2,6 +2,7 @@
 #define TALKTEXT_HPP
 
 #include "Util/GameObject.hpp"
+#include "Util/Image.hpp"
 #include "Util/Text.hpp"
 #include <memory>
 #include <string>
@@ -22,13 +23,19 @@ public:
 
     void SetTextNow(std::string inputText);
 private:
+    std::string SPRITES_PATH = "../assets/sprites/";
+
+
     std::string text = "";
     std::string currentText = " ";
 
     std::shared_ptr<Util::Text> m_Text;
+    std::shared_ptr<Util::GameObject> bg = std::make_shared<Util::GameObject>();
+    std::shared_ptr<Util::GameObject> character = std::make_shared<Util::GameObject>();
 
     std::string m_Font;
     int m_Size;
 
+    glm::vec2 TALK_START_POINT = {-8, -3};
 };
 #endif
