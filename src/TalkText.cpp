@@ -12,7 +12,7 @@
 
 void TalkText::Start(){
     m_Text = std::make_unique<Util::Text>(m_Font, m_Size, "0",
-                                          Util::Color(1, 1, 1, 1) );
+                                          Util::Color::FromRGB(255, 255,255));
     SetDrawable(m_Text);
     this->SetPosition({
     (TALK_START_POINT.x + 4) * BLOCK_SIZE,

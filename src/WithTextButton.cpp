@@ -8,7 +8,7 @@ void WithTextButton::Init(std::string font, const int size) {
     m_Size = size;
 
     m_Text = std::make_unique<Util::Text>(m_Font, m_Size, "0",
-                                          Util::Color(1, 1, 1, 1) );
+                                          Util::Color::FromRGB(255, 255, 255));
     m_TextObject->SetDrawable(m_Text);
     m_TextObject->SetZIndex(this->GetZIndex() +1 );
 
