@@ -11,10 +11,10 @@
 
 namespace Util {
 Text::Text(const std::string &font, int fontSize, const std::string &text,
-           const Util::Color &color, int wrapLength)
+         const Util::Color &color)
     : m_Text(text),
-      m_Color(color),
-      m_wrapLength(wrapLength) {
+      m_Color(color)
+       {
     if (s_Program == nullptr) {
         InitProgram();
     }
