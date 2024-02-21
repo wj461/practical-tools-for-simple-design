@@ -27,9 +27,9 @@ void App::Start() {
     m_Map->SetZIndex(MAP_Z);
     m_Map->Start();
 
-    m_Root.AddChild(m_TalkText);
     m_Root.AddChild(m_Giraffe);
     m_Root.AddChild(m_Map);
+    m_Root.AddChild(m_TalkText);
 
     m_CurrentState = State::UPDATE;
 }
@@ -39,7 +39,11 @@ void App::Update() {
         // LOG_DEBUG("Left button down");
     }
     if (Util::Input::IsLButtonEdge()) {
-        LOG_DEBUG("Left button edge");
+        // LOG_DEBUG("Left button edge");
+    }
+
+    if (Util::Input::IsLButtonDoubleClick()){
+        LOG_DEBUG("double click");
     }
 
     if (Util::Input::IsRButtonDown()) {

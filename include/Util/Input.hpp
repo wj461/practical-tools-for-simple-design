@@ -5,6 +5,7 @@
 
 #include <SDL_events.h> // for SDL_Event
 #include <SDL_stdinc.h> // for Uint8
+#include <glm/fwd.hpp>
 
 #include "Util/Keycode.hpp" // for Keycode
 
@@ -77,6 +78,8 @@ public:
 
     static bool IsLButtonEdge();
 
+    static bool IsLButtonDoubleClick();
+
     /**
      * @brief Checks if the right mouse button is currently down.
      * @return  true if the right mouse button is currently down, false
@@ -134,14 +137,18 @@ private:
 
     static glm::vec2 s_CursorPosition;
     static glm::vec2 s_ScrollDistance;
+    static glm::vec2 s_LastMouseClickPosition;
 
     static bool s_LBPressed;
     static bool s_LBFailingEdge;
+    static bool s_LBDoubleClick;
     static bool s_RBPressed;
     static bool s_MBPressed;
     static bool s_Scroll;
     static bool s_MouseMoving;
     static bool s_Exit;
+
+    static time_t s_LBDoubleClickStartTime;
 };
 
 } // namespace Util

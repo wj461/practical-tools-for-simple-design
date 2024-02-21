@@ -1,7 +1,10 @@
 #include "Util/Input.hpp"
 
+#include "Util/Logger.hpp"
 #include "config.hpp"
 #include <SDL_events.h> // for SDL_Event
+#include <chrono>
+#include <glm/fwd.hpp>
 
 namespace Util {
 
@@ -10,13 +13,16 @@ SDL_Event Input::s_Event = SDL_Event();
 const Uint8 *Input::s_KeyState = SDL_GetKeyboardState(nullptr);
 glm::vec2 Input::s_CursorPosition = glm::vec2(0.0F);
 glm::vec2 Input::s_ScrollDistance = glm::vec2(-1.0F, -1.0F);
+glm::vec2 Input::s_LastMouseClickPosition = glm::vec2(0,0);
 bool Input::s_LBPressed = false;
 bool Input::s_LBFailingEdge = false;
+bool Input::s_LBDoubleClick = false;
 bool Input::s_RBPressed = false;
 bool Input::s_MBPressed = false;
 bool Input::s_Scroll = false;
 bool Input::s_MouseMoving = false;
 bool Input::s_Exit = false;
+std::time_t Input::s_LBDoubleClickStartTime = std::time(nullptr);
 
 bool Input::IsKeyPressed(const Keycode &key) {
     const auto temp = static_cast<const int>(key);
@@ -25,6 +31,10 @@ bool Input::IsKeyPressed(const Keycode &key) {
 
 bool Input::IsLButtonEdge() {
     return s_LBFailingEdge;
+}
+
+bool Input::IsLButtonDoubleClick(){
+    return s_LBDoubleClick;
 }
 
 bool Input::IsLButtonDown() {
@@ -64,6 +74,7 @@ void Input::Update() {
 
     s_Scroll = s_MouseMoving = false;
     s_LBFailingEdge = false;
+    s_LBDoubleClick = false;
 
     while (SDL_PollEvent(&s_Event) != 0) {
         if (s_Event.type == SDL_MOUSEBUTTONUP &&
@@ -102,6 +113,18 @@ void Input::Update() {
         }
         s_MouseMoving = s_Event.type == SDL_MOUSEMOTION || s_MouseMoving;
         s_Exit = s_Event.type == SDL_QUIT;
+    }
+
+    if (s_LBFailingEdge){
+        auto ms = std::chrono::seconds( std::time(nullptr) - s_LBDoubleClickStartTime);
+        if (ms.count() < 1 && s_LastMouseClickPosition == s_CursorPosition){
+            s_LBDoubleClick = true;
+            s_LastMouseClickPosition = {0,0};
+            return;
+        }
+
+        s_LBDoubleClickStartTime = std::time(nullptr);
+        s_LastMouseClickPosition = s_CursorPosition;
     }
 }
 

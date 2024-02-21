@@ -1,15 +1,16 @@
 #include "map.hpp"
 #include "Block.hpp"
-#include "Util/GameObject.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Logger.hpp"
 #include "WithTextButton.hpp"
 #include "config.hpp"
 #include <cmath>
+#include <ctime>
 #include <glm/detail/qualifier.hpp>
 #include <glm/fwd.hpp>
 #include <memory>
+#include <spdlog/details/os.h>
 #include <spdlog/fmt/bundled/core.h>
 #include <spdlog/spdlog.h>
 #include <string>
@@ -36,7 +37,7 @@ void Map::Update() {
         current_tool = ChooseTool(index_pos);
         current_page_index = ChoosePage(index_pos);
         VisibleCurrentPageMaterial(current_page_index);
-        LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
+        // LOG_DEBUG("index pos {},{}", index_pos.x, index_pos.y);
     }
 
     switch (current_tool) {
