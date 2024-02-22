@@ -49,7 +49,7 @@ void TalkText::Update() {
     }
 
     if (Util::Input::IsLButtonEdge()) {
-        SetText("123456\nasdasdsadas");
+        SetText("123456\n 6666666666");
     }
 
     m_Text->SetText(currentText);

@@ -90,6 +90,8 @@ public:
         return m_Children;
     }
 
+    bool GetVisible() { return m_Visible; }
+
     /**
      * @brief Set the pivot of the game object.
      *

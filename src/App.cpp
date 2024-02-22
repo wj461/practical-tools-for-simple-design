@@ -11,8 +11,7 @@
 
 void App::Start() {
     LOG_TRACE("Start");
-    m_TalkText =
-        std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 20);
+    m_TalkText = std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 20);
     m_TalkText->SetZIndex(UI_Z);
     m_TalkText->Start();
 
@@ -42,7 +41,7 @@ void App::Update() {
         // LOG_DEBUG("Left button edge");
     }
 
-    if (Util::Input::IsLButtonDoubleClick()){
+    if (Util::Input::IsLButtonDoubleClick()) {
         LOG_DEBUG("double click");
     }
 
@@ -78,7 +77,6 @@ void App::Update() {
     m_TalkText->Update();
 
     m_Root.Update();
-
 }
 
 void App::End() { // NOLINT(this method will mutate members in the future)

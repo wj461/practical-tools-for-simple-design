@@ -49,6 +49,7 @@ void Root::Update() {
         renderQueue.push(curr);
 
         for (const auto &child : curr.m_GameObject->GetChildren()) {
+            child->SetVisible(curr.m_GameObject->GetVisible());
             stack.push_back(
                 StackInfo{child, curr.m_GameObject->GetTransform()});
         }
@@ -57,7 +58,6 @@ void Root::Update() {
     while (!renderQueue.empty()) {
         auto curr = renderQueue.top();
         renderQueue.pop();
-
         curr.m_GameObject->Draw();
     }
 }
