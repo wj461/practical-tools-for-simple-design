@@ -291,12 +291,14 @@ glm::int64 Map::ChoosePage(glm::vec2 indexPos) {
 void Map::VisibleCurrentPageMaterial(glm::int64 currentPage) {
     for (auto page : material_map) {
         for (auto material : page) {
-            material->SetVisible(false);
+            // material->SetVisible(false);
+            this->RemoveChild(material);
         }
     }
 
     auto current_page = material_map[currentPage];
     for (auto material : current_page) {
-        material->SetVisible(true);
+        // material->SetVisible(true);
+        this->AddChild(material);
     }
 }

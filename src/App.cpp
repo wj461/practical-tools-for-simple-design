@@ -26,10 +26,7 @@ void App::Start() {
     m_Map->SetZIndex(MAP_Z);
     m_Map->Start();
 
-    m_Root.AddChild(m_Giraffe);
-    m_Root.AddChild(m_Map);
-    m_Root.AddChild(m_TalkText);
-
+    m_Root.AddChildren({m_Giraffe, m_Map, m_TalkText});
     m_CurrentState = State::UPDATE;
 }
 
