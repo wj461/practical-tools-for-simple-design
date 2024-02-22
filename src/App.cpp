@@ -36,6 +36,7 @@ void App::Update() {
     }
     if (Util::Input::IsLButtonEdge()) {
         // LOG_DEBUG("Left button edge");
+        // m_TalkText->SetVisible(!(m_TalkText->GetVisible()));
     }
 
     if (Util::Input::IsLButtonDoubleClick()) {

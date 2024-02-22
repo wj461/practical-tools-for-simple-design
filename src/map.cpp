@@ -118,7 +118,8 @@ void Map::LoadChooseEventFocus() {
     auto img = std::make_shared<Util::Image>(path);
     event_focus =
         NewBlock(MAP_START_INDEX, {0, 0}, BlockType::Focus, FOCUS_Z, img);
-    event_focus->SetVisible(false);
+    // event_focus->SetVisible(false);
+    this->RemoveChild(event_focus);
 }
 
 void Map::LoadChooseToolFocus() {
@@ -261,13 +262,15 @@ std::shared_ptr<Block> Map::ChooseEventBlock(glm::vec2 indexPos) {
 
 Tool Map::ChooseTool(glm::vec2 indexPos) {
     if (indexPos == TOOL_START_INDEX) {
-        event_focus->SetVisible(false);
+        // event_focus->SetVisible(false);
+        this->RemoveChild(event_focus);
         tool_focus->SetIndexPostion(indexPos);
         return Tool::Edit;
     }
     if (indexPos.x == TOOL_START_INDEX.x + 1 &&
         indexPos.y == TOOL_START_INDEX.y) {
-        event_focus->SetVisible(true);
+        // event_focus->SetVisible(true);
+        this->AddChild(event_focus);
         tool_focus->SetIndexPostion(indexPos);
         return Tool::Event;
     }
