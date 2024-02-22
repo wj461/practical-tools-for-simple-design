@@ -7,7 +7,7 @@
 #include <memory>
 #include <string>
 
-class TalkText : public Util::GameObject{
+class TalkText : public Util::GameObject {
 public:
     TalkText() = default;
 
@@ -21,17 +21,20 @@ public:
 
     void SetText(std::string inputText);
 
-    void SetTextNow(std::string inputText);
+    void SetCharacterImg(std::shared_ptr<Util::Image> img);
+
+    void SetBackgroundImg(std::shared_ptr<Util::Image> img);
+
 private:
     std::string SPRITES_PATH = "../assets/sprites/";
-
 
     std::string text = "";
     std::string currentText = " ";
 
     std::shared_ptr<Util::Text> m_Text;
     std::shared_ptr<Util::GameObject> bg = std::make_shared<Util::GameObject>();
-    std::shared_ptr<Util::GameObject> character = std::make_shared<Util::GameObject>();
+    std::shared_ptr<Util::GameObject> character =
+        std::make_shared<Util::GameObject>();
 
     std::string m_Font;
     int m_Size;

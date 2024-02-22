@@ -33,8 +33,8 @@ public:
      * @param visible The visibility of the game object.
      * @param children The children of the game object.
      */
-    GameObject(std::unique_ptr<Core::Drawable> drawable, const float zIndex, const glm::vec2& pivot = {0, 0},
-               const bool visible = true,
+    GameObject(std::unique_ptr<Core::Drawable> drawable, const float zIndex,
+               const glm::vec2 &pivot = {0, 0}, const bool visible = true,
                const std::vector<std::shared_ptr<GameObject>> &children =
                    std::vector<std::shared_ptr<GameObject>>())
         : m_Drawable(std::move(drawable)),
@@ -80,9 +80,7 @@ public:
         return m_Drawable->GetSize() * m_Transform.scale;
     };
 
-    glm::vec2 GetSize() const {
-        return m_Drawable->GetSize();
-    };
+    glm::vec2 GetSize() const { return m_Drawable->GetSize(); };
     /**
      * @brief Get the children of the game object.
      *
@@ -99,7 +97,10 @@ public:
      */
     // void SetPivot(glm::vec2 pivot) { m_Pivot = pivot; }
 
-    void SetPivotToLeftTop() { m_Pivot = {(-1) * glm::int64(m_Drawable->GetSize().x/2), (-1) *glm::int64(m_Drawable->GetSize().y/2)}; }
+    void SetPivotToLeftButton() {
+        m_Pivot = {(-1) * glm::int64(m_Drawable->GetSize().x / 2),
+                   (-1) * glm::int64(m_Drawable->GetSize().y / 2)};
+    }
 
     /**
      * @brief Set the z-index of the game object.
@@ -126,7 +127,9 @@ public:
      */
     void SetVisible(const bool visible) { m_Visible = visible; }
 
-    void SetPosition(const glm::vec2 position) { m_Transform.translation = position; }
+    void SetPosition(const glm::vec2 position) {
+        m_Transform.translation = position;
+    }
 
     /**
      * @brief Add a child to the game object.
@@ -143,8 +146,9 @@ public:
      * @param child The child to be removed.
      */
     void RemoveChild(const std::shared_ptr<GameObject> &child) {
-        m_Children.erase(std::remove(m_Children.begin(), m_Children.end(), child),
-                         m_Children.end());
+        m_Children.erase(
+            std::remove(m_Children.begin(), m_Children.end(), child),
+            m_Children.end());
     }
 
     void Draw();
