@@ -6,13 +6,19 @@
 #include "Util/Logger.hpp"
 
 #include "GiraffeText.hpp"
+#include <memory>
 
 void App::Start() {
     LOG_TRACE("Start");
 
-    // m_Map->Start();
+    m_Map->SetDrawable(
+        std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
+    m_Map->SetZIndex(5);
+    m_Map->Start();
 
-    // m_Root.AddChild(m_Map);
+    m_TalkText->Start();
+
+    m_Root.AddChildren({m_Map, m_TalkText});
 
     m_CurrentState = State::UPDATE;
 }
@@ -52,7 +58,7 @@ void App::Update() {
                   glm::to_string(Util::Input::GetCursorPosition()));
     }
 
-    // m_Map->Update();
+    m_Map->Update();
     m_Root.Update();
 }
 
