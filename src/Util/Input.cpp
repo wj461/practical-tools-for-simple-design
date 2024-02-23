@@ -1,51 +1,49 @@
 #include "Util/Input.hpp"
 
-#include "Util/Logger.hpp"
 #include "config.hpp"
 #include <SDL_events.h> // for SDL_Event
-#include <chrono>
-#include <glm/fwd.hpp>
+
+#include "config.hpp"
 
 namespace Util {
 
 // init all static members
 SDL_Event Input::s_Event = SDL_Event();
-const Uint8 *Input::s_KeyState = SDL_GetKeyboardState(nullptr);
+const Uint8 *Input::s_CurrentKeyState = SDL_GetKeyboardState(nullptr);
+std::unordered_map<int, bool> Input::s_LastKeyState = {};
+
 glm::vec2 Input::s_CursorPosition = glm::vec2(0.0F);
 glm::vec2 Input::s_ScrollDistance = glm::vec2(-1.0F, -1.0F);
-glm::vec2 Input::s_LastMouseClickPosition = glm::vec2(0,0);
-bool Input::s_LBPressed = false;
-bool Input::s_LBFailingEdge = false;
-bool Input::s_LBDoubleClick = false;
-bool Input::s_RBPressed = false;
-bool Input::s_MBPressed = false;
+
+std::unordered_map<Keycode, std::pair<bool, bool>> Input::s_MouseState = {
+    std::make_pair(Keycode::MOUSE_LB, std::make_pair(false, false)),
+    std::make_pair(Keycode::MOUSE_RB, std::make_pair(false, false)),
+    std::make_pair(Keycode::MOUSE_MB, std::make_pair(false, false)),
+};
+
 bool Input::s_Scroll = false;
 bool Input::s_MouseMoving = false;
 bool Input::s_Exit = false;
 std::time_t Input::s_LBDoubleClickStartTime = std::time(nullptr);
 
 bool Input::IsKeyPressed(const Keycode &key) {
-    const auto temp = static_cast<const int>(key);
-    return s_KeyState[temp] != 0;
+    if (key > Keycode::NUM_SCANCODES) {
+        return s_MouseState[key].second; // && !s_MouseState[key].first;
+    }
+
+    const auto index = static_cast<const int>(key);
+    return s_CurrentKeyState[index] != 0 && s_LastKeyState[index] != 0;
 }
 
-bool Input::IsLButtonEdge() {
-    return s_LBFailingEdge;
+bool Input::IsKeyUp(const Keycode &key) {
+    if (key > Keycode::NUM_SCANCODES) {
+        return s_MouseState[key].second && !s_MouseState[key].first;
+    }
+
+    const auto index = static_cast<const int>(key);
+    return s_CurrentKeyState[index] == 0 && s_LastKeyState[index] != 0;
 }
 
-bool Input::IsLButtonDoubleClick(){
-    return s_LBDoubleClick;
-}
-
-bool Input::IsLButtonDown() {
-    return s_LBPressed;
-}
-bool Input::IsRButtonDown() {
-    return s_RBPressed;
-}
-bool Input::IsMButtonDown() {
-    return s_MBPressed;
-}
 bool Input::IsMouseMoving() {
     return s_MouseMoving;
 }
@@ -73,36 +71,59 @@ void Input::Update() {
         -(s_CursorPosition.y - static_cast<float>(WINDOW_HEIGHT) / 2);
 
     s_Scroll = s_MouseMoving = false;
-    s_LBFailingEdge = false;
-    s_LBDoubleClick = false;
+
+    for (int i = 0; i < 512; ++i) {
+        s_LastKeyState[i] = s_CurrentKeyState[i];
+    }
+
+    s_MouseState[Keycode::MOUSE_LB].first =
+        s_MouseState[Keycode::MOUSE_LB].second;
+
+    s_MouseState[Keycode::MOUSE_RB].first =
+        s_MouseState[Keycode::MOUSE_RB].second;
+
+    s_MouseState[Keycode::MOUSE_MB].first =
+        s_MouseState[Keycode::MOUSE_MB].second;
+
+    for (int i = 0; i < 512; ++i) {
+        s_LastKeyState[i] = s_CurrentKeyState[i];
+    }
+
+    s_MouseState[Keycode::MOUSE_LB].first =
+        s_MouseState[Keycode::MOUSE_LB].second;
+
+    s_MouseState[Keycode::MOUSE_RB].first =
+        s_MouseState[Keycode::MOUSE_RB].second;
+
+    s_MouseState[Keycode::MOUSE_MB].first =
+        s_MouseState[Keycode::MOUSE_MB].second;
 
     while (SDL_PollEvent(&s_Event) != 0) {
         if (s_Event.type == SDL_MOUSEBUTTONUP &&
             s_Event.button.button == SDL_BUTTON_LEFT) {
-            s_LBPressed = false;
+            s_MouseState[Keycode::MOUSE_LB].second = false;
         }
         if (s_Event.type == SDL_MOUSEBUTTONDOWN &&
             s_Event.button.button == SDL_BUTTON_LEFT) {
-            s_LBFailingEdge = true;
-            s_LBPressed = true;
+            s_MouseState[Keycode::MOUSE_LB].second = true;
         }
 
         if (s_Event.type == SDL_MOUSEBUTTONUP &&
             s_Event.button.button == SDL_BUTTON_RIGHT) {
-            s_RBPressed = false;
+            s_MouseState[Keycode::MOUSE_RB].second = false;
         }
         if (s_Event.type == SDL_MOUSEBUTTONDOWN &&
             s_Event.button.button == SDL_BUTTON_RIGHT) {
-            s_RBPressed = true;
+            s_MouseState[Keycode::MOUSE_RB].second = true;
         }
 
         if (s_Event.type == SDL_MOUSEBUTTONUP &&
             s_Event.button.button == SDL_BUTTON_MIDDLE) {
-            s_MBPressed = false;
+            s_MouseState[Keycode::MOUSE_MB].second = false;
         }
         if (s_Event.type == SDL_MOUSEBUTTONDOWN &&
             s_Event.button.button == SDL_BUTTON_MIDDLE) {
-            s_MBPressed = true;
+            s_MouseState[Keycode::MOUSE_MB].second = true;
         }
 
         s_Scroll = s_Event.type == SDL_MOUSEWHEEL || s_Scroll;
@@ -115,17 +136,18 @@ void Input::Update() {
         s_Exit = s_Event.type == SDL_QUIT;
     }
 
-    if (s_LBFailingEdge){
-        auto ms = std::chrono::seconds( std::time(nullptr) - s_LBDoubleClickStartTime);
-        if (ms.count() < 1 && s_LastMouseClickPosition == s_CursorPosition){
-            s_LBDoubleClick = true;
-            s_LastMouseClickPosition = {0,0};
-            return;
-        }
+    // if (s_LBFailingEdge){
+    //     auto ms = std::chrono::seconds( std::time(nullptr) -
+    //     s_LBDoubleClickStartTime); if (ms.count() < 1 &&
+    //     s_LastMouseClickPosition == s_CursorPosition){
+    //         s_LBDoubleClick = true;
+    //         s_LastMouseClickPosition = {0,0};
+    //         return;
+    //     }
 
-        s_LBDoubleClickStartTime = std::time(nullptr);
-        s_LastMouseClickPosition = s_CursorPosition;
-    }
+    //     s_LBDoubleClickStartTime = std::time(nullptr);
+    //     s_LastMouseClickPosition = s_CursorPosition;
+    // }
 }
 
 glm::vec2 Input::GetCursorPosition() {
@@ -136,4 +158,5 @@ void Input::SetCursorPosition(const glm::vec2 &pos) {
     SDL_WarpMouseInWindow(nullptr, static_cast<int>(pos.x),
                           static_cast<int>(pos.y));
 }
+
 } // namespace Util

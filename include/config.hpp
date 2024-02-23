@@ -26,4 +26,11 @@ constexpr int MATERIAL_COL_NUM = 4;
 
 constexpr Util::Logger::Level DEFAULT_LOG_LEVEL = Util::Logger::Level::DEBUG;
 
+/**
+ * @brief FPS limit
+ *
+ * Set value to 0 to turn off FPS cap
+ */
+constexpr unsigned int FPS_CAP = 60;
+
 #endif
