@@ -28,13 +28,8 @@ public:
 private:
     State m_CurrentState = State::START;
 
-    std::shared_ptr<Giraffe> m_Giraffe = std::make_shared<Giraffe>();
     std::shared_ptr<Map> m_Map = std::make_shared<Map>();
-    std::shared_ptr<TalkText> m_TalkText = std::make_shared<TalkText>();
-    //    std::shared_ptr<GiraffeText> m_GiraffeText =
-    //    std::make_shared<GiraffeText>();
 
-    std::shared_ptr<Cat> m_Cat = std::make_shared<Cat>();
     Util::Root m_Root;
 };
 

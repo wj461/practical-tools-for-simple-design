@@ -92,7 +92,7 @@ public:
      */
     static bool IsKeyUp(const Keycode &key);
 
-    static bool IsLButtonDoubleClick();
+    static bool IsLButtonDoubleClick() { return s_LBDoubleClick; };
 
     /**
      * @brief Checks if the mouse wheel is currently being scrolled.
@@ -145,6 +145,7 @@ private:
     static bool s_Scroll;
     static bool s_MouseMoving;
     static bool s_Exit;
+    static bool s_LBDoubleClick;
 
     static unsigned long s_LBDoubleClickStartTime;
 };

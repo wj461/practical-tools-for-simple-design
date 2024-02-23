@@ -10,20 +10,16 @@
 void App::Start() {
     LOG_TRACE("Start");
 
-    m_Giraffe->SetDrawable(
-        std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
-    m_Giraffe->SetZIndex(5);
-    m_Giraffe->Start();
+    // m_Map->Start();
 
-    m_Root.AddChild(m_Giraffe);
-    m_Root.AddChild(m_Cat);
+    // m_Root.AddChild(m_Map);
 
     m_CurrentState = State::UPDATE;
 }
 
 void App::Update() {
-    if (Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB)) {
-        // LOG_DEBUG("Left button pressed");
+    if (Util::Input::IsLButtonDoubleClick()) {
+        LOG_DEBUG("Double Click");
     }
 
     if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB)) {
@@ -56,9 +52,7 @@ void App::Update() {
                   glm::to_string(Util::Input::GetCursorPosition()));
     }
 
-    m_Giraffe->Update();
-    m_Cat->Update();
-
+    // m_Map->Update();
     m_Root.Update();
 }
 
