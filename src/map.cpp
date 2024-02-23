@@ -2,6 +2,7 @@
 #include "Block.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
+#include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 #include "WithTextButton.hpp"
 #include "config.hpp"
@@ -34,7 +35,7 @@ void Map::Update() {
                         floor(mouse_position.y / BLOCK_SIZE)};
 
     // Tool select
-    if (Util::Input::IsLButtonEdge()) {
+    if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
         current_tool = ChooseTool(index_pos);
         current_page_index = ChoosePage(index_pos);
         VisibleCurrentPageMaterial(current_page_index);
@@ -44,17 +45,19 @@ void Map::Update() {
     switch (current_tool) {
     case Edit:
         // edit map
-        if (Util::Input::IsLButtonDown() && IsEditRange(index_pos)) {
+        if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB) &&
+            IsEditRange(index_pos)) {
             ChangeBlockMaterial(index_pos, current_material_index.y);
         }
         // chang target material
-        else if (Util::Input::IsLButtonEdge()) {
+        else if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
             current_material_index =
                 ChooseMaterial(index_pos, current_page_index);
         }
         break;
     case Event:
-        if (Util::Input::IsLButtonEdge() && IsEditRange(index_pos)) {
+        if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB) &&
+            IsEditRange(index_pos)) {
             current_event = ChooseEventBlock(index_pos);
         }
         break;

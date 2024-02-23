@@ -24,7 +24,7 @@ std::unordered_map<Keycode, std::pair<bool, bool>> Input::s_MouseState = {
 bool Input::s_Scroll = false;
 bool Input::s_MouseMoving = false;
 bool Input::s_Exit = false;
-std::time_t Input::s_LBDoubleClickStartTime = std::time(nullptr);
+// std::time_t Input::s_LBDoubleClickStartTime = std::time(nullptr);
 
 bool Input::IsKeyPressed(const Keycode &key) {
     if (key > Keycode::NUM_SCANCODES) {
@@ -33,6 +33,15 @@ bool Input::IsKeyPressed(const Keycode &key) {
 
     const auto index = static_cast<const int>(key);
     return s_CurrentKeyState[index] != 0 && s_LastKeyState[index] != 0;
+}
+
+bool Input::IsKeyDown(const Keycode &key) {
+    if (key > Keycode::NUM_SCANCODES) {
+        return s_MouseState[key].second && !s_MouseState[key].first;
+    }
+
+    const auto index = static_cast<const int>(key);
+    return s_CurrentKeyState[index] != 0 && s_LastKeyState[index] == 0;
 }
 
 bool Input::IsKeyUp(const Keycode &key) {

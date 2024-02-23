@@ -1,6 +1,7 @@
 #include "TalkText.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
+#include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
 #include "Util/Transform.hpp"
@@ -48,7 +49,7 @@ void TalkText::Update() {
         text.erase(0, 1);
     }
 
-    if (Util::Input::IsLButtonEdge()) {
+    if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_LB)) {
         SetText("123456\n 6666666666");
     }
 
