@@ -92,6 +92,8 @@ public:
      */
     static bool IsKeyUp(const Keycode &key);
 
+    static bool IsLButtonDoubleClick();
+
     /**
      * @brief Checks if the mouse wheel is currently being scrolled.
      * @return  A bool value representing the current state of the mouse
@@ -137,7 +139,6 @@ private:
 
     static glm::vec2 s_CursorPosition;
     static glm::vec2 s_ScrollDistance;
-    // static glm::vec2 s_LastMouseClickPosition;
 
     static std::unordered_map<Keycode, std::pair<bool, bool>> s_MouseState;
 
@@ -145,7 +146,7 @@ private:
     static bool s_MouseMoving;
     static bool s_Exit;
 
-    // static time_t s_LBDoubleClickStartTime;
+    static unsigned long s_LBDoubleClickStartTime;
 };
 
 } // namespace Util

@@ -1,46 +1,38 @@
 #include "App.hpp"
 
-#include "TalkText.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
 
 #include "GiraffeText.hpp"
-#include "config.hpp"
 
 void App::Start() {
     LOG_TRACE("Start");
-    m_TalkText = std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 20);
-    m_TalkText->SetZIndex(UI_Z);
-    m_TalkText->Start();
 
     m_Giraffe->SetDrawable(
-        std::make_shared<Util::Image>("../assets/sprites/block.png"));
-    m_Giraffe->SetZIndex(10);
+        std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
+    m_Giraffe->SetZIndex(5);
     m_Giraffe->Start();
-    // m_Giraffe->AddChild(m_TalkText);
 
-    m_Map->SetDrawable(
-        std::make_shared<Util::Image>("../assets/sprites/block.png"));
-    m_Map->SetZIndex(MAP_Z);
-    m_Map->Start();
+    m_Root.AddChild(m_Giraffe);
+    m_Root.AddChild(m_Cat);
 
-    m_Root.AddChildren({m_Giraffe, m_Map, m_TalkText});
     m_CurrentState = State::UPDATE;
-    m_TalkText->SetVisible(false);
 }
 
 void App::Update() {
     if (Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB)) {
         // LOG_DEBUG("Left button pressed");
     }
+
     if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB)) {
         LOG_DEBUG("Right button down");
     }
     if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_RB)) {
         LOG_DEBUG("Right button up");
     }
+
     if (Util::Input::IfScroll()) {
         auto delta = Util::Input::GetScrollDistance();
         LOG_DEBUG("Scrolling: x: {}, y: {}", delta.x, delta.y);
@@ -49,8 +41,7 @@ void App::Update() {
         // LOG_DEBUG("Mouse moving! x:{}, y{}", cursorPos.x, cursorPos.y);
     }
 
-    if (Util::Input::IsKeyPressed(Util::Keycode::ESCAPE) ||
-        Util::Input::IfExit()) {
+    if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
 
@@ -66,8 +57,7 @@ void App::Update() {
     }
 
     m_Giraffe->Update();
-    m_Map->Update();
-    m_TalkText->Update();
+    m_Cat->Update();
 
     m_Root.Update();
 }

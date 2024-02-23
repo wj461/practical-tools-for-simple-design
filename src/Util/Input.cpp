@@ -1,5 +1,8 @@
 #include "Util/Input.hpp"
 
+#include "Util/Keycode.hpp"
+#include "Util/Logger.hpp"
+#include "Util/Time.hpp"
 #include "config.hpp"
 #include <SDL_events.h> // for SDL_Event
 
@@ -11,6 +14,7 @@ namespace Util {
 SDL_Event Input::s_Event = SDL_Event();
 const Uint8 *Input::s_CurrentKeyState = SDL_GetKeyboardState(nullptr);
 std::unordered_map<int, bool> Input::s_LastKeyState = {};
+unsigned long Input::s_LBDoubleClickStartTime = 0;
 
 glm::vec2 Input::s_CursorPosition = glm::vec2(0.0F);
 glm::vec2 Input::s_ScrollDistance = glm::vec2(-1.0F, -1.0F);
@@ -24,7 +28,6 @@ std::unordered_map<Keycode, std::pair<bool, bool>> Input::s_MouseState = {
 bool Input::s_Scroll = false;
 bool Input::s_MouseMoving = false;
 bool Input::s_Exit = false;
-// std::time_t Input::s_LBDoubleClickStartTime = std::time(nullptr);
 
 bool Input::IsKeyPressed(const Keycode &key) {
     if (key > Keycode::NUM_SCANCODES) {
@@ -46,7 +49,7 @@ bool Input::IsKeyDown(const Keycode &key) {
 
 bool Input::IsKeyUp(const Keycode &key) {
     if (key > Keycode::NUM_SCANCODES) {
-        return s_MouseState[key].second && !s_MouseState[key].first;
+        return !s_MouseState[key].second && s_MouseState[key].first;
     }
 
     const auto index = static_cast<const int>(key);
@@ -145,18 +148,12 @@ void Input::Update() {
         s_Exit = s_Event.type == SDL_QUIT;
     }
 
-    // if (s_LBFailingEdge){
-    //     auto ms = std::chrono::seconds( std::time(nullptr) -
-    //     s_LBDoubleClickStartTime); if (ms.count() < 1 &&
-    //     s_LastMouseClickPosition == s_CursorPosition){
-    //         s_LBDoubleClick = true;
-    //         s_LastMouseClickPosition = {0,0};
-    //         return;
-    //     }
-
-    //     s_LBDoubleClickStartTime = std::time(nullptr);
-    //     s_LastMouseClickPosition = s_CursorPosition;
-    // }
+    if (IsKeyDown(Keycode::MOUSE_LB)) {
+        if (Util::Time::GetElapsedTimeMs() - s_LBDoubleClickStartTime < 500) {
+            LOG_DEBUG("double click");
+        }
+        s_LBDoubleClickStartTime = Util::Time::GetElapsedTimeMs();
+    }
 }
 
 glm::vec2 Input::GetCursorPosition() {
