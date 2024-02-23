@@ -28,6 +28,8 @@ public:
 
     glm::vec2 GetSize() const override { return m_Size; };
 
+    std::string GetText() { return m_Text; };
+
     /**
      * @brief Sets the text to the specified string.
      *

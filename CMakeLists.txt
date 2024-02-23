@@ -54,6 +54,7 @@ set(SRC_FILES
     ${SRC_DIR}/TalkText.cpp
     ${SRC_DIR}/WithTextButton.cpp
     ${SRC_DIR}/Event.cpp
+    ${SRC_DIR}/InputBox.cpp
 )
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(INCLUDE_FILES
@@ -93,7 +94,9 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/TalkText.hpp
     ${INCLUDE_DIR}/Event.hpp
     ${INCLUDE_DIR}/WithTextButton.hpp
+    ${INCLUDE_DIR}/InputBox.hpp
     ${INCLUDE_DIR}/config.hpp
+
 )
 set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 set(TEST_FILES

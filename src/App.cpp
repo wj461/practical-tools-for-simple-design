@@ -28,6 +28,7 @@ void App::Start() {
 
     m_Root.AddChildren({m_Giraffe, m_Map, m_TalkText});
     m_CurrentState = State::UPDATE;
+    m_TalkText->SetVisible(false);
 }
 
 void App::Update() {
@@ -36,11 +37,10 @@ void App::Update() {
     }
     if (Util::Input::IsLButtonEdge()) {
         // LOG_DEBUG("Left button edge");
-        // m_TalkText->SetVisible(!(m_TalkText->GetVisible()));
     }
 
     if (Util::Input::IsLButtonDoubleClick()) {
-        LOG_DEBUG("double click");
+        // LOG_DEBUG("DoubleClick");
     }
 
     if (Util::Input::IsRButtonDown()) {
