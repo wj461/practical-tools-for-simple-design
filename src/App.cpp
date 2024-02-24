@@ -1,5 +1,6 @@
 #include "App.hpp"
 
+#include "TalkText.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
@@ -16,6 +17,8 @@ void App::Start() {
     m_Map->SetZIndex(5);
     m_Map->Start();
 
+    m_TalkText = std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 20);
+    m_TalkText->SetZIndex(UI_Z);
     m_TalkText->Start();
 
     m_Root.AddChildren({m_Map, m_TalkText});
@@ -26,6 +29,7 @@ void App::Start() {
 void App::Update() {
     if (Util::Input::IsLButtonDoubleClick()) {
         LOG_DEBUG("Double Click");
+        m_TalkText->SetVisible(!m_TalkText->GetVisible());
     }
 
     if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB)) {
@@ -59,6 +63,7 @@ void App::Update() {
     }
 
     m_Map->Update();
+    m_TalkText->Update();
     m_Root.Update();
 }
 

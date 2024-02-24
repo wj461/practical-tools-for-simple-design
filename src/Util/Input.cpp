@@ -153,6 +153,8 @@ void Input::Update() {
     if (IsKeyDown(Keycode::MOUSE_LB)) {
         if (Util::Time::GetElapsedTimeMs() - s_LBDoubleClickStartTime < 500) {
             s_LBDoubleClick = true;
+            s_LBDoubleClickStartTime = 0;
+            return;
         }
         s_LBDoubleClickStartTime = Util::Time::GetElapsedTimeMs();
     }
