@@ -17,7 +17,11 @@ public:
 
     void Update();
 
+    bool GetEnable() { return enable; }
+
     std::string ConvertKeycodeToString(Util::Keycode key);
+
+    void SetEnable(bool e) { enable = e; }
 
 private:
     std::shared_ptr<Util::Text> m_Text;
@@ -27,6 +31,7 @@ private:
     int m_Size;
 
     bool enable = true;
+    bool capsLock = false;
 };
 
 #endif
