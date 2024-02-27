@@ -175,15 +175,10 @@ Keycode Input::GetCurrentKeycode() {
          fooInt != static_cast<glm::int64>(Keycode::Z); fooInt++) {
         Keycode keycode = static_cast<Keycode>(fooInt);
         if (IsKeyDown(keycode)) {
-            LOG_DEBUG("{}", fooInt);
             return keycode;
         }
     }
     return Keycode::UNKNOWN;
 }
-
-// glm::int64 Input::GetCurrentKeycode() {
-//     return 1;
-// }
 
 } // namespace Util

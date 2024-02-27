@@ -1,5 +1,6 @@
 #include "App.hpp"
 
+#include "InputBox.hpp"
 #include "TalkText.hpp"
 #include "Util/Image.hpp"
 #include "Util/Input.hpp"
@@ -7,6 +8,7 @@
 #include "Util/Logger.hpp"
 
 #include "GiraffeText.hpp"
+#include "config.hpp"
 #include <memory>
 
 void App::Start() {
@@ -21,7 +23,11 @@ void App::Start() {
     m_TalkText->SetZIndex(UI_Z);
     m_TalkText->Start();
 
-    m_Root.AddChildren({m_Map, m_TalkText});
+    m_InputBox = std::make_shared<InputBox>("../assets/fonts/Inter.ttf", 20);
+    m_InputBox->SetZIndex(FOCUS_Z);
+    m_InputBox->Start();
+
+    m_Root.AddChildren({m_Map, m_TalkText, m_InputBox});
 
     m_CurrentState = State::UPDATE;
 }
@@ -64,6 +70,7 @@ void App::Update() {
 
     m_Map->Update();
     m_TalkText->Update();
+    m_InputBox->Update();
     m_Root.Update();
 }
 
