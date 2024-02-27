@@ -17,10 +17,11 @@ public:
 
     void Update();
 
-    std::string ConvertKeyCodeToString(Util::Keycode key);
+    std::string ConvertKeycodeToString(Util::Keycode key);
 
 private:
     std::shared_ptr<Util::Text> m_Text;
+    std::string current_text = " ";
 
     std::string m_Font;
     int m_Size;
