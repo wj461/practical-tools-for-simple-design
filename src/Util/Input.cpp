@@ -5,6 +5,7 @@
 #include "Util/Time.hpp"
 #include "config.hpp"
 #include <SDL_events.h> // for SDL_Event
+#include <glm/fwd.hpp>
 
 #include "config.hpp"
 
@@ -168,5 +169,21 @@ void Input::SetCursorPosition(const glm::vec2 &pos) {
     SDL_WarpMouseInWindow(nullptr, static_cast<int>(pos.x),
                           static_cast<int>(pos.y));
 }
+
+Keycode Input::GetCurrentKeycode() {
+    for (glm::int64 fooInt = static_cast<glm::int64>(Keycode::A);
+         fooInt != static_cast<glm::int64>(Keycode::Z); fooInt++) {
+        Keycode keycode = static_cast<Keycode>(fooInt);
+        if (IsKeyDown(keycode)) {
+            LOG_DEBUG("{}", fooInt);
+            return keycode;
+        }
+    }
+    return Keycode::UNKNOWN;
+}
+
+// glm::int64 Input::GetCurrentKeycode() {
+//     return 1;
+// }
 
 } // namespace Util

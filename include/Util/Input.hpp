@@ -64,6 +64,8 @@ public:
      *
      * @see Util::Keycode
      */
+    static Keycode GetCurrentKeycode();
+
     static bool IsKeyPressed(const Keycode &key);
 
     /**
