@@ -172,7 +172,7 @@ void Input::SetCursorPosition(const glm::vec2 &pos) {
 
 Keycode Input::GetCurrentKeycode() {
     for (glm::int64 fooInt = static_cast<glm::int64>(Keycode::A);
-         fooInt != static_cast<glm::int64>(Keycode::Z); fooInt++) {
+         fooInt != static_cast<glm::int64>(Keycode::SPACE) + 1; fooInt++) {
         Keycode keycode = static_cast<Keycode>(fooInt);
         if (IsKeyDown(keycode)) {
             return keycode;
