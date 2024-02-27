@@ -10,7 +10,7 @@
 #include <spdlog/fmt/bundled/format.h>
 #include <string>
 void InputBox::Start() {
-    m_Text = std::make_unique<Util::Text>(m_Font, m_Size, " aaaa",
+    m_Text = std::make_unique<Util::Text>(m_Font, m_Size, " aaa\na",
                                           Util::Color::FromRGB(255, 255, 255));
     current_text = m_Text->GetText();
     SetDrawable(m_Text);
@@ -33,6 +33,10 @@ void InputBox::Update() {
                 current_text = current_text.substr(0, current_text.size() - 1);
                 m_Text->SetText(current_text + "|");
             }
+        }
+        if (Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
+            current_text += "\n";
+            m_Text->SetText(current_text + "|");
         }
     } else {
         m_Text->SetText(current_text);
@@ -70,6 +74,9 @@ std::string InputBox::ConvertKeycodeToString(Util::Keycode key) {
     }
     if (key == Util::Keycode::NUM_0) {
         return "0";
+    }
+    if (key == Util::Keycode::BACKSLASH) {
+        return "\\";
     }
 
     return result;

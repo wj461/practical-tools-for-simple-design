@@ -83,7 +83,7 @@ private:
     std::string m_Text;
     Util::Color m_Color;
     glm::vec2 m_Size;
-    int m_wrapLength;
+    int m_wrapLength = 0;
 };
 } // namespace Util
 
