@@ -4,6 +4,7 @@
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Time.hpp"
 #include <asm-generic/errno.h>
 #include <glm/fwd.hpp>
 #include <locale>
@@ -22,18 +23,31 @@ void InputBox::Update() {
     }
 
     if (enable) {
-        auto current_key = Util::Input::GetCurrentKeycode();
-        if (current_key != Util::Keycode::UNKNOWN) {
-            auto nowKey = ConvertKeycodeToString(current_key);
-            current_text += nowKey;
+        Util::Keycode current_key = Util::Input::GetCurrentPressKeycode();
+        Util::Keycode currentDown_key = Util::Input::GetCurrentDownKeycode();
+
+        if (currentDown_key != Util::Keycode::UNKNOWN) {
+            counter = Util::Time::GetElapsedTimeMs();
+            current_text += ConvertKeycodeToString(currentDown_key);
+            m_Text->SetText(current_text + "|");
+        } else if (current_key != Util::Keycode::UNKNOWN &&
+                   Util::Time::GetElapsedTimeMs() - counter > 500) {
+            current_text += ConvertKeycodeToString(current_key);
             m_Text->SetText(current_text + "|");
         }
-        if (Util::Input::IsKeyPressed(Util::Keycode::BACKSPACE)) {
-            if (m_Text->GetText() != " ") {
+
+        if (Util::Input::IsKeyDown(Util::Keycode::BACKSPACE)) {
+            counter = Util::Time::GetElapsedTimeMs();
+            current_text = current_text.substr(0, current_text.size() - 1);
+            m_Text->SetText(current_text + "|");
+        } else if (Util::Input::IsKeyPressed(Util::Keycode::BACKSPACE)) {
+            if (m_Text->GetText() != " " &&
+                Util::Time::GetElapsedTimeMs() - counter > 500) {
                 current_text = current_text.substr(0, current_text.size() - 1);
                 m_Text->SetText(current_text + "|");
             }
         }
+
         if (Util::Input::IsKeyDown(Util::Keycode::RETURN)) {
             current_text += "\n";
             m_Text->SetText(current_text + "|");

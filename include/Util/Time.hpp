@@ -27,8 +27,6 @@ public:
      */
     static double GetDeltaTime() { return s_DeltaTime; }
 
-    static bool Delay(int mSec);
-
     /**
      * @brief Get the elapsed time from the start of the program in
      * milliseconds.

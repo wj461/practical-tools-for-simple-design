@@ -26,6 +26,7 @@ public:
 private:
     std::shared_ptr<Util::Text> m_Text;
     std::string current_text = " ";
+    unsigned long counter = 0;
 
     std::string m_Font;
     int m_Size;

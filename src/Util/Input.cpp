@@ -170,7 +170,20 @@ void Input::SetCursorPosition(const glm::vec2 &pos) {
                           static_cast<int>(pos.y));
 }
 
-Keycode Input::GetCurrentKeycode() {
+Keycode Input::GetCurrentPressKeycode() {
+    // get code first
+    for (glm::int64 fooInt = static_cast<glm::int64>(Keycode::A);
+         fooInt != static_cast<glm::int64>(Keycode::BACKSLASH) + 1; fooInt++) {
+        Keycode keycode = static_cast<Keycode>(fooInt);
+        if (IsKeyPressed(keycode)) {
+            return keycode;
+        }
+    }
+    return Keycode::UNKNOWN;
+}
+
+Keycode Input::GetCurrentDownKeycode() {
+    // get code first
     for (glm::int64 fooInt = static_cast<glm::int64>(Keycode::A);
          fooInt != static_cast<glm::int64>(Keycode::BACKSLASH) + 1; fooInt++) {
         Keycode keycode = static_cast<Keycode>(fooInt);
@@ -180,5 +193,4 @@ Keycode Input::GetCurrentKeycode() {
     }
     return Keycode::UNKNOWN;
 }
-
 } // namespace Util
