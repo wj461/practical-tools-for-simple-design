@@ -14,6 +14,7 @@ void InputBox::Start() {
     m_Text = std::make_unique<Util::Text>(m_Font, m_Size, " aaa\na",
                                           Util::Color::FromRGB(255, 255, 255));
     current_text = m_Text->GetText();
+    m_Text->SetText(current_text + "|");
     SetDrawable(m_Text);
 }
 
@@ -23,16 +24,16 @@ void InputBox::Update() {
     }
 
     if (enable) {
-        Util::Keycode current_key = Util::Input::GetCurrentPressKeycode();
-        Util::Keycode currentDown_key = Util::Input::GetCurrentDownKeycode();
+        Util::Keycode current_press_key = Util::Input::GetCurrentPressKeycode();
+        Util::Keycode current_down_key = Util::Input::GetCurrentDownKeycode();
 
-        if (currentDown_key != Util::Keycode::UNKNOWN) {
+        if (current_down_key != Util::Keycode::UNKNOWN) {
             counter = Util::Time::GetElapsedTimeMs();
-            current_text += ConvertKeycodeToString(currentDown_key);
+            current_text += ConvertKeycodeToString(current_down_key);
             m_Text->SetText(current_text + "|");
-        } else if (current_key != Util::Keycode::UNKNOWN &&
+        } else if (current_press_key != Util::Keycode::UNKNOWN &&
                    Util::Time::GetElapsedTimeMs() - counter > 500) {
-            current_text += ConvertKeycodeToString(current_key);
+            current_text += ConvertKeycodeToString(current_press_key);
             m_Text->SetText(current_text + "|");
         }
 
