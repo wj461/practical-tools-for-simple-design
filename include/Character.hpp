@@ -16,6 +16,10 @@ public:
 
     glm::vec2 CheckMoveRange(glm::vec2 postion, glm::vec2 distance);
 
+    void SetCharInitPosition(glm::vec2 indexPos) {
+        CHARACTER_START_INDEX = indexPos;
+    };
+
 private:
     glm::int64 MOVE_NUMBER = 8;
 

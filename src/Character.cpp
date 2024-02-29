@@ -58,23 +58,19 @@ glm::vec2 Character::CheckMoveRange(glm::vec2 position, glm::vec2 distance) {
     glm::int64 right = (MAP_END_INDEX.x - 1) * BLOCK_SIZE;
 
     if ((position + distance).y >= top) {
-        LOG_DEBUG("top");
         result.y = position.y + (top - position.y);
     }
 
     if ((position + distance).y <= bottom) {
-        LOG_DEBUG("bottom");
         result.y = position.y + (bottom - position.y);
     }
 
     if ((position + distance).x <= left) {
         result.x = position.x + (left - position.x);
-        LOG_DEBUG("P {}, L {},  result {}", position.x, left, result.x);
     }
 
     if ((position + distance).x >= right) {
         result.x = position.x + (right - position.x);
-        LOG_DEBUG("right");
     }
 
     return result;
