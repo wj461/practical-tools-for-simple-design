@@ -1,6 +1,7 @@
 #ifndef APP_HPP
 #define APP_HPP
 
+#include "Character.hpp"
 #include "InputBox.hpp"
 #include "TalkText.hpp"
 #include "map.hpp"
@@ -33,6 +34,7 @@ private:
     std::shared_ptr<Map> m_Map = std::make_shared<Map>();
     std::shared_ptr<TalkText> m_TalkText = std::make_shared<TalkText>();
     std::shared_ptr<InputBox> m_InputBox = std::make_shared<InputBox>();
+    std::shared_ptr<Character> m_char = std::make_shared<Character>();
 
     Util::Root m_Root;
 };

@@ -19,6 +19,10 @@ void App::Start() {
     m_Map->SetZIndex(5);
     m_Map->Start();
 
+    m_char->SetDrawable(
+        std::make_shared<Util::Image>("../assets/sprites/Blank.png"));
+    m_char->Start();
+
     m_TalkText = std::make_shared<TalkText>("../assets/fonts/Inter.ttf", 20);
     m_TalkText->SetZIndex(UI_Z);
     m_TalkText->Start();
@@ -27,7 +31,7 @@ void App::Start() {
     m_InputBox->SetZIndex(FOCUS_Z);
     m_InputBox->Start();
 
-    m_Root.AddChildren({m_Map, m_TalkText, m_InputBox});
+    m_Root.AddChildren({m_Map, m_TalkText, m_InputBox, m_char});
 
     m_CurrentState = State::UPDATE;
 }
@@ -71,6 +75,7 @@ void App::Update() {
     m_Map->Update();
     m_TalkText->Update();
     m_InputBox->Update();
+    m_char->Update();
     m_Root.Update();
 }
 

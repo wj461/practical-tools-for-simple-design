@@ -24,6 +24,13 @@ constexpr glm::vec2 MAP_SIZE = {15, 10};
 constexpr glm::vec2 TALK_SIZE = {15, 3};
 constexpr int MATERIAL_COL_NUM = 4;
 
+constexpr glm::vec2 LEFT_TOP_POS = {glm::int64(WINDOW_WIDTH / 2) * (-1),
+                                    glm::int64(WINDOW_HEIGHT / 2)};
+
+constexpr glm::vec2 MAP_START_POS = {(LEFT_TOP_POS.x) +
+                                         ((MATERIAL_COL_NUM + 1) * BLOCK_SIZE),
+                                     (WINDOW_HEIGHT / 2)};
+
 constexpr Util::Logger::Level DEFAULT_LOG_LEVEL = Util::Logger::Level::DEBUG;
 
 /**
