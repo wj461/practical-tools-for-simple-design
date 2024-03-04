@@ -39,7 +39,8 @@ public:
     GameObject(const std::shared_ptr<Core::Drawable> &drawable,
                const float zIndex, const bool visible = true,
                const std::vector<std::shared_ptr<GameObject>> &children =
-                   std::vector<std::shared_ptr<GameObject>>())
+                   std::vector<std::shared_ptr<GameObject>>(),
+               const glm::vec2 &pivot = {0, 0})
         : m_Drawable(drawable),
           m_Children(children),
           m_ZIndex(zIndex),

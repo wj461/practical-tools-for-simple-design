@@ -26,7 +26,7 @@ private:
     glm::vec2 CHARACTER_START_INDEX = {-8, 6};
 
     std::shared_ptr<Util::Image> work_img =
-        std::make_shared<Util::Image>("../assets/sprites/character_small.png");
+        std::make_shared<Util::Image>("../assets/sprites/ch.png");
 
     glm::vec2 MAP_START_INDEX = {floor(MAP_START_POS.x / BLOCK_SIZE) + 1,
                                  floor(MAP_START_POS.y / BLOCK_SIZE) - 1};
