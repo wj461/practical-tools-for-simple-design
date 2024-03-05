@@ -115,7 +115,10 @@ public:
     /**
      * @brief Reset the animation to its initial frame.
      */
-    void Reset() { SetCurrentFrame(0); }
+    void Reset() {
+        SetCurrentFrame(0);
+        m_State = State::PLAY;
+    }
 
     /**
      * @brief Start playing the animation.

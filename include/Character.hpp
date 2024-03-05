@@ -11,12 +11,14 @@
 
 enum Motion {
     IDLE,
-    IDLE_2,
-    WALK_VERTICAL,
-    WALK_HORIZONTAL,
-    WALK_SLASH,
+    // IDLE_2,
+    // WALK_VERTICAL,
+    // WALK_HORIZONTAL,
+    // WALK_SLASH,
     JUMP,
+    SIT_DOWN,
     SIT,
+    SIT_UP,
     SIT_SLEEP,
     BATTLE,
     DAMAGE
@@ -36,6 +38,15 @@ public:
         CHARACTER_START_INDEX = indexPos;
     };
 
+    std::shared_ptr<Util::Animation> AddIdle();
+    std::shared_ptr<Util::Animation> AddBattle();
+    std::shared_ptr<Util::Animation> AddKega();
+    std::shared_ptr<Util::Animation> AddSitDown();
+    std::shared_ptr<Util::Animation> AddSit();
+    std::shared_ptr<Util::Animation> AddSitUp();
+    std::shared_ptr<Util::Animation> AddSleep();
+    std::shared_ptr<Util::Animation> AddJump();
+
 private:
     void MoveFunction();
 
@@ -53,6 +64,8 @@ private:
 
     glm::vec2 MAP_END_INDEX = {MAP_START_INDEX.x + MAP_SIZE.x,
                                MAP_START_INDEX.y - MAP_SIZE.y};
+
+    std::string CHAR_SPRITES_PATH = "../assets/sprites/Character/ani/";
 };
 
 #endif
