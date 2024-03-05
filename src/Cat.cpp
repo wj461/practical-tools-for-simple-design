@@ -15,7 +15,7 @@ Cat::Cat()
               "../assets/sprites/cat/cat-6.bmp",
               "../assets/sprites/cat/cat-7.bmp",
           },
-          true, 50, true, 1000)) {
+          true, 50, true, 0)) {
     m_Transform.translation = {-200, 200};
     SetDrawable(m_Animation);
 }

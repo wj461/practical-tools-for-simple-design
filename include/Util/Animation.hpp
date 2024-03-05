@@ -36,8 +36,8 @@ public:
      * restart.
      */
     Animation(const std::vector<std::string> &paths, bool play,
-              std::size_t interval, bool looping = true,
-              std::size_t cooldown = 100);
+              std::size_t interval = 50, bool looping = true,
+              std::size_t cooldown = 0);
 
     /**
      * @brief Get the interval between frames.

@@ -16,6 +16,10 @@ void Character::Start() {
 }
 
 void Character::Update() {
+    MoveFunction();
+}
+
+void Character::MoveFunction() {
     auto position = this->GetTransform().translation;
     glm::vec2 force = {0, 0};
 
