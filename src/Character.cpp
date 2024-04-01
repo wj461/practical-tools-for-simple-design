@@ -2,7 +2,6 @@
 #include "Util/Animation.hpp"
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
-#include "Util/Logger.hpp"
 #include "config.hpp"
 #include <glm/fwd.hpp>
 #include <memory>
